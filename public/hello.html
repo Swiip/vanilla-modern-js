@@ -1,0 +1,45 @@
+<link rel="import" href="another.html">
+<template>
+  <h1>Hello <span></span>!!</h1>
+</template>
+
+<script>
+const importDoc = document.currentScript.ownerDocument;
+</script>
+
+<script type="module">
+import { who } from "./hello.js";
+
+class Hello extends HTMLElement {
+  get who() {
+    return this.getAttribute("who");
+  }
+
+  set who(val) {
+    if (val) {
+      this.setAttribute("who", val);
+    } else {
+      this.removeAttribute("who");
+    }
+    this.whoChanged();
+  }
+
+  constructor() {
+    super();
+
+    console.log("Constructor", who);
+
+    const template = importDoc.querySelector("template");
+    this.attachShadow({ mode: "open" });
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+    this.whoChanged();
+  }
+
+  whoChanged() {
+    this.shadowRoot.querySelector("span").innerHTML = this.who;
+  }
+}
+
+customElements.define("swiip-hello", Hello);
+</script>
