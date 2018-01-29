@@ -1,0 +1,33 @@
+<template>
+  <div class="container">
+    <slot></slot>
+  </div>
+
+  <style>
+  .container {
+    width: 500px;
+    margin: 0 auto;
+  }
+  </style>
+</template>
+
+<script>
+const importContainerDoc = document.currentScript.ownerDocument;
+</script>
+
+<script type="module">
+class Container extends HTMLElement {
+  constructor() {
+    super();
+
+    console.log("Container Constructor");
+
+    this.attachShadow({ mode: "open" });
+
+    const template = importContainerDoc.querySelector("template");
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
+}
+
+customElements.define("swiip-container", Container);
+</script>
