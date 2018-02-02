@@ -1,6 +1,7 @@
 <template>
   <div class="game-container">
     <div class="grid-container"></div>
+    <div class="tile-container"></div>
   </div>
 
   <style>
@@ -19,7 +20,78 @@
     height: 100px;
     width: 100px;
     border-radius: 3px;
-    background-color: var(--disable-text-white);
+    background-color: #cdc1b4;
+  }
+
+  .tile {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    border-radius: 3px;
+    z-index: 10;
+    font-weight: bold;
+    font-size: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tile2 {
+    background-color: #eee4da;
+  }
+
+  .tile4 {
+    background-color: #ede0c8;
+  }
+
+  .tile8 {
+    color: #f9f6f2;
+    background: #f2b179;
+  }
+
+  .tile16 {
+    color: #f9f6f2;
+    background: #f59563;
+  }
+
+  .tile32 {
+    color: #f9f6f2;
+    background: #f67c5f;
+  }
+
+  .tile64 {
+    color: #f9f6f2;
+    background: #f65e3b;
+  }
+
+  .tile128 {
+    color: #f9f6f2;
+    background: #edcf72;
+    font-size: 45px;
+  }
+
+  .tile256 {
+    color: #f9f6f2;
+    background: #edcc61;
+    font-size: 45px;
+  }
+
+  .tile512 {
+    color: #f9f6f2;
+    background: #edc850;
+    font-size: 45px;
+  }
+
+  .tile1024 {
+    color: #f9f6f2;
+    background: #edc53f;
+    font-size: 35px;
+  }
+
+  .tile2048 {
+    color: #f9f6f2;
+    background: #edc22e;
+    font-size: 35px;
   }
   </style>
 </template>
@@ -31,6 +103,11 @@ window.docs.Game = document.currentScript.ownerDocument;
 <script type="module">
 import { range } from "/utils/utils.js";
 
+import store from "/logic/store.js";
+import { move } from "/logic/actions.js";
+
+import { size } from "/game/conf.js";
+
 class Game extends HTMLElement {
   constructor() {
     super();
@@ -41,17 +118,21 @@ class Game extends HTMLElement {
 
     const template = window.docs.Game.querySelector("template");
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
 
-    this.lines = range(4);
-    this.cols = range(4);
-
+  connectedCallback() {
     this.buildGrid();
+
+    store.subscribe(() => this.updateTiles());
+    this.updateTiles();
+
+    this.listenKeyboard();
   }
 
   buildGrid() {
     const gameContainer = this.shadowRoot.querySelector(".grid-container");
-    this.lines.forEach(x => {
-      this.cols.forEach(y => {
+    range(size).forEach(x => {
+      range(size).forEach(y => {
         const cell = document.createElement("div");
         cell.classList.add("grid-cell");
         cell.style.top = `${20 + 120 * y}px`;
@@ -59,6 +140,43 @@ class Game extends HTMLElement {
         gameContainer.appendChild(cell);
       });
     });
+  }
+
+  listenKeyboard() {
+    window.addEventListener("keydown", event => this.keyHandler(event));
+  }
+
+  updateTiles() {
+    const tileContainer = this.shadowRoot.querySelector(".tile-container");
+    tileContainer.innerHTML = "";
+
+    const { board } = store.getState();
+    board.forEach(rows => {
+      rows.forEach(cell => {
+        if (cell.value > 0) {
+          const tile = document.createElement("div");
+          tile.classList.add("tile");
+          tile.classList.add(`tile${cell.value}`);
+          tile.style.top = `${20 + 120 * cell.row}px`;
+          tile.style.left = `${20 + 120 * cell.column}px`;
+          tile.textContent = cell.value;
+          this.shadowRoot.querySelector(".tile-container").appendChild(tile);
+        }
+      });
+    });
+  }
+
+  keyHandler(event) {
+    const keyMapping = {
+      ArrowLeft: 0,
+      ArrowUp: 1,
+      ArrowRight: 2,
+      ArrowDown: 3
+    };
+    if (keyMapping[event.key] !== undefined) {
+      move(keyMapping[event.key], store);
+      event.preventDefault();
+    }
   }
 }
 

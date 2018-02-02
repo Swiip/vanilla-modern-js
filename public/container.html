@@ -12,7 +12,7 @@
 </template>
 
 <script>
-const importContainerDoc = document.currentScript.ownerDocument;
+window.docs.Container = document.currentScript.ownerDocument;
 </script>
 
 <script type="module">
@@ -24,7 +24,7 @@ class Container extends HTMLElement {
 
     this.attachShadow({ mode: "open" });
 
-    const template = importContainerDoc.querySelector("template");
+    const template = window.docs.Container.querySelector("template");
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 }

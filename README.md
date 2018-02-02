@@ -17,3 +17,11 @@
 * JavaScript module in the browser
 
 * Web Components : Custom Elements / HTML Imports / Shadow Dom
+
+* CSS variables (looking for more advanced CSS features to use)
+
+* Redux clone to manage game state
+
+## Application
+
+2048 clone. It's fun, doesn't need backend and is rich enough to trigger some real questions

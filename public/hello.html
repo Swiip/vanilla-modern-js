@@ -4,7 +4,7 @@
 </template>
 
 <script>
-const importDoc = document.currentScript.ownerDocument;
+window.docs.Hello = document.currentScript.ownerDocument;
 </script>
 
 <script type="module">
@@ -29,7 +29,7 @@ class Hello extends HTMLElement {
 
     console.log("Constructor", who);
 
-    const template = importDoc.querySelector("template");
+    const template = window.docs.Hello.querySelector("template");
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 

@@ -59,7 +59,7 @@
 </template>
 
 <script>
-const importHeadingDoc = document.currentScript.ownerDocument;
+window.docs.Heading = document.currentScript.ownerDocument;
 </script>
 
 <script type="module">
@@ -71,7 +71,7 @@ class Heading extends HTMLElement {
 
     this.attachShadow({ mode: "open" });
 
-    const template = importHeadingDoc.querySelector("template");
+    const template = window.docs.Heading.querySelector("template");
     this.shadowRoot.appendChild(template.content.cloneNode(true));
   }
 }
