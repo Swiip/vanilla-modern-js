@@ -1,0 +1,66 @@
+<template>
+  <div class="game-container">
+    <div class="grid-container"></div>
+  </div>
+
+  <style>
+  .game-container {
+    margin-top: 40px;
+    position: relative;
+    background: var(--light-bg-brown);
+    border-radius: 6px;
+    width: 500px;
+    height: 500px;
+    box-sizing: border-box;
+  }
+
+  .grid-cell {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    border-radius: 3px;
+    background-color: var(--disable-text-white);
+  }
+  </style>
+</template>
+
+<script>
+window.docs.Game = document.currentScript.ownerDocument;
+</script>
+
+<script type="module">
+import { range } from "/utils/utils.js";
+
+class Game extends HTMLElement {
+  constructor() {
+    super();
+
+    console.log("Game Constructor");
+
+    this.attachShadow({ mode: "open" });
+
+    const template = window.docs.Game.querySelector("template");
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+    this.lines = range(4);
+    this.cols = range(4);
+
+    this.buildGrid();
+  }
+
+  buildGrid() {
+    const gameContainer = this.shadowRoot.querySelector(".grid-container");
+    this.lines.forEach(x => {
+      this.cols.forEach(y => {
+        const cell = document.createElement("div");
+        cell.classList.add("grid-cell");
+        cell.style.top = `${20 + 120 * y}px`;
+        cell.style.left = `${20 + 120 * x}px`;
+        gameContainer.appendChild(cell);
+      });
+    });
+  }
+}
+
+customElements.define("swiip-game", Game);
+</script>

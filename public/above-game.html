@@ -1,0 +1,51 @@
+<template>
+  <div class="above-game">
+    <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
+    <a class="restart-button">New Game</a>
+  </div>
+
+  <style>
+  .above-game {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .restart-button {
+    color: var(--light-text-white);
+    background-color: var(--heavy-bg-brown);
+    border-radius: 3px;
+    padding: 0 20px;
+    text-decoration: none;
+    color: #f9f6f2;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+  }
+  </style>
+</template>
+
+<script>
+window.docs.AboveGame = document.currentScript.ownerDocument;
+</script>
+
+<script type="module">
+class AboveGame extends HTMLElement {
+  constructor() {
+    super();
+
+    console.log("AboveGame Constructor");
+
+    this.attachShadow({ mode: "open" });
+
+    const template = window.docs.AboveGame.querySelector("template");
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+  }
+}
+
+customElements.define("swiip-above-game", AboveGame);
+</script>

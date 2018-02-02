@@ -1,11 +1,21 @@
 @import url("/fonts/clear-sans.css");
 
+:root {
+  --main-bg-color: #faf8ef;
+  --main-text-color: #776e65;
+  --light-bg-brown: #bbada0;
+  --heavy-bg-brown: #8f7a66;
+
+  --disable-text-white: #eee4da;
+  --light-text-white: #f9f6f2;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
-  background: #faf8ef;
-  color: #776e65;
+  background: var(--main-bg-color);
+  color: var(--main-text-color);
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
   font-size: 18px;
 }

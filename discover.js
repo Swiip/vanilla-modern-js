@@ -7,7 +7,7 @@ const readFile = util.promisify(fs.readFile);
 
 const pushTypes = [".html", ".js", ".css"];
 
-const htmlLinkRegex = /<link[^>]+href="([^"]*)"[\s\/]*[^>]*>/g;
+const htmlLinkRegex = /<link[^>]+href="([^"]*)"[\s/]*[^>]*>/g;
 const htmlScriptRegex = /<script[^>]*src="([^"]*)"[^>]*>[\s]*<\/script>/g;
 const jsImportRegex = /import.*from[\s]+"([^"]*)"/g;
 const cssImportRegex = /url\("([^"]*)"\)/g;
@@ -35,6 +35,7 @@ const findPushFiles = async requestPath => {
   if (ext === ".html") {
     pushes.push(...gatherMatches(htmlLinkRegex, content));
     pushes.push(...gatherMatches(htmlScriptRegex, content));
+    pushes.push(...gatherMatches(jsImportRegex, content));
   }
 
   if (ext === ".js") {
