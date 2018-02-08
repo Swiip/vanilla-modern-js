@@ -34,6 +34,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    transition: all .3s ease;
+    animation: .3s appear;
   }
 
   .tile2 {
@@ -93,6 +96,23 @@
     background: #edc22e;
     font-size: 35px;
   }
+
+   @keyframes appear {
+     from {
+       height: 0;
+       width: 0;
+       opacity: 0;
+       margin-top: 50px;
+       margin-left: 50px;
+     }
+     to {
+       height: 100px;
+       width: 100px;
+       opacity: 1;
+       margin-top: 0;
+       margin-left: 0;
+     }
+   }
   </style>
 </template>
 
@@ -121,6 +141,9 @@ class Game extends HTMLElement {
   }
 
   connectedCallback() {
+    this.tileContainer = this.shadowRoot.querySelector(".tile-container");
+    this.tiles = {};
+
     this.buildGrid();
 
     store.subscribe(() => this.updateTiles());
@@ -146,24 +169,60 @@ class Game extends HTMLElement {
     window.addEventListener("keydown", event => this.keyHandler(event));
   }
 
+  addTile(cell) {
+    const tile = document.createElement("div");
+    this.updateTile(tile, cell);
+    this.tileContainer.appendChild(tile);
+    return tile;
+  }
+
+  updateTile(tile, cell) {
+    tile.className = "";
+    tile.classList.add("tile");
+    tile.classList.add(`tile${cell.value}`);
+    tile.style.top = `${20 + 120 * cell.row}px`;
+    tile.style.left = `${20 + 120 * cell.column}px`;
+    tile.textContent = cell.value;
+  }
+
+  updateMergedTile(tile, cell) {
+    this.updateTile(tile, cell);
+    tile.classList.add("merged");
+  }
+
   updateTiles() {
     const tileContainer = this.shadowRoot.querySelector(".tile-container");
-    tileContainer.innerHTML = "";
 
     const { board } = store.getState();
+
+    const newTiles = {};
+
     board.forEach(rows => {
       rows.forEach(cell => {
-        if (cell.value > 0) {
-          const tile = document.createElement("div");
-          tile.classList.add("tile");
-          tile.classList.add(`tile${cell.value}`);
-          tile.style.top = `${20 + 120 * cell.row}px`;
-          tile.style.left = `${20 + 120 * cell.column}px`;
-          tile.textContent = cell.value;
-          this.shadowRoot.querySelector(".tile-container").appendChild(tile);
+        if (this.tiles.hasOwnProperty(cell.id)) {
+          this.updateTile(this.tiles[cell.id], cell);
+          newTiles[cell.id] = this.tiles[cell.id];
+        } else if (cell.value > 0) {
+          const newTile = this.addTile(cell);
+          newTiles[cell.id] = newTile;
+        }
+        if (Array.isArray(cell.merged)) {
+          cell.merged.forEach(mergedCell => {
+            this.updateMergedTile(this.tiles[mergedCell.id], cell);
+            newTiles[mergedCell.id] = this.tiles[mergedCell.id];
+          });
         }
       });
     });
+
+    const existingTiles = tileContainer.querySelectorAll(".tile");
+    existingTiles.forEach(existingTile => {
+      if (!Object.values(newTiles).includes(existingTile)) {
+        existingTile.remove();
+      }
+    });
+
+    this.tiles = newTiles;
   }
 
   keyHandler(event) {
