@@ -17,3 +17,7 @@ export function times(n, func) {
     func();
   }
 }
+
+export const forEach = (...args) => Array.prototype.forEach.call(...args);
+export const map = (...args) => Array.prototype.map.call(...args);
+export const reduce = (...args) => Array.prototype.reduce.call(...args);

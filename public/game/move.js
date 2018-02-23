@@ -37,12 +37,14 @@ function moveLeft(board) {
       }
       if (currentRow.length > 0 && currentRow[0].value === targetTile.value) {
         const tile1 = targetTile;
+        tile1.merged = true;
         targetTile = createTile(targetTile.value);
-        targetTile.merged = [];
-        targetTile.merged.push(tile1);
+        targetTile.mergedTiles = [];
+        targetTile.mergedTiles.push(tile1);
         const tile2 = { ...currentRow.shift() };
+        tile2.merged = true;
         targetTile.value += tile2.value;
-        targetTile.merged.push(tile2);
+        targetTile.mergedTiles.push(tile2);
       }
       changed |= targetTile.value !== row[target].value;
       return targetTile;
