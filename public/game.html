@@ -140,7 +140,7 @@ import store from "/logic/store.js";
 import { move } from "/logic/actions.js";
 
 import { updateElement } from "/render/render.js";
-import { parser } from "/render/parser.js";
+import { dom } from "/render/parser.js";
 
 import { size } from "/game/conf.js";
 
@@ -225,42 +225,44 @@ class Game extends HTMLElement {
       });
     });
 
-    const newDom = parser`
+    const newDom = dom`
       <div class="game-container">
         <div class="grid-container">
-          ${range(size).map(x =>
-            range(size).map(
-              y =>
-                `<div
-                  class="grid-cell"
-                  style="
-                    top: ${20 + 120 * y}px;
-                    left: ${20 + 120 * x}px;
-                  ">
-                </div>`
+          ${range(size)
+            .map(x =>
+              range(size)
+                .map(
+                  y =>
+                    `<div
+                      class="grid-cell"
+                      style="top: ${20 + 120 * y}px; left: ${20 + 120 * x}px;">
+                    </div>`
+                )
+                .join("")
             )
-          )}
+            .join("")}
         </div>
         <div class="tile-container">
-          ${tiles.map(
-            tile => `
-              <div
-                class="tile tile${tile.value} ${tile.merged ? "merged" : ""}"
-                style="
-                  top: ${20 + 120 * tile.row}px;
-                  left: ${20 + 120 * tile.column}px;
-                ">
-                ${tile.value}
-              </div>
-            `
-          )}
+          ${tiles
+            .map(
+              tile =>
+                `<div
+                  class="tile tile${tile.value} ${tile.merged ? "merged" : ""}"
+                  style="top: ${20 + 120 * tile.row}px; left: ${20 +
+                  120 * tile.column}px;">
+                  ${tile.value}
+                </div>`
+            )
+            .join("")}
         </div>
       </div>
     `;
 
-    updateElement(this.root, newDom, this.oldDom);
+    console.log("next dom", newDom);
 
-    this.oldDom = newDom;
+    updateElement(this.root, newDom);
+
+    // this.oldDom = newDom;
 
     // const newTiles = {};
     //

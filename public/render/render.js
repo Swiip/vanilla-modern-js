@@ -1,63 +1,52 @@
-import { map } from "/utils/utils.js";
+import { forEach } from "/utils/utils.js";
 
-function setAttrs($target, attrs) {
-  Object.keys(attrs).forEach(name => {
-    $target.setAttribute(name, attrs[name]);
-  });
-}
-
-function updateAttr($target, name, newVal, oldVal) {
-  if (!newVal) {
-    $target.removeAttribute(name);
-  } else if (!oldVal || newVal !== oldVal) {
-    $target.setAttribute(name, newVal);
+function updateAttr(target, name, newAttr, oldAttr) {
+  if (!newAttr) {
+    target.removeAttribute(name);
+  } else if (!oldAttr.value || newAttr.value !== oldAttr.value) {
+    target.setAttribute(name, newAttr.value);
   }
 }
 
-function updateAttrs($target, newAttrs, oldAttrs = {}) {
-  const attrs = Object.assign({}, newAttrs, oldAttrs);
-  Object.keys(attrs).forEach(name => {
-    updateAttr($target, name, newAttrs[name], oldAttrs[name]);
-  });
-}
-
-function createElement(node) {
-  if (typeof node === "string") {
-    return document.createTextNode(node);
-  }
-  const $el = document.createElement(node.type);
-  setAttrs($el, node.attrs);
-  node.children.map(createElement).forEach($el.appendChild.bind($el));
-  return $el;
+function updateAttrs(target, newNode) {
+  const attrNames = new Set();
+  [target, newNode].forEach(node =>
+    forEach(node.attributes, attr => attrNames.add(attr.name))
+  );
+  attrNames.forEach(name =>
+    updateAttr(target, name, newNode.attributes[name], target.attributes[name])
+  );
 }
 
 function changed(node1, node2) {
   return (
-    typeof node1 !== typeof node2 ||
-    (typeof node1 === "string" && node1 !== node2) ||
-    node1.type !== node2.type
+    ((node1.tagName !== undefined || node2.tagName !== undefined) &&
+      node1.tagName !== node2.tagName) ||
+    (node1.tagName === undefined &&
+      node2.tagName === undefined &&
+      node1.data !== node2.data)
   );
 }
 
-export function updateElement($parent, newNode, oldNode, index = 0) {
+export function updateElement(parent, newNode, index = 0) {
+  const oldNode = parent.childNodes[index];
+  // console.log("updateElement", parent, newNode, oldNode, index);
   if (!oldNode) {
-    $parent.appendChild(createElement(newNode));
+    // console.log("append", newNode);
+    parent.appendChild(newNode);
   } else if (!newNode) {
-    $parent.removeChild($parent.childNodes[index]);
+    // console.log("remove", oldNode);
+    parent.removeChild(oldNode);
   } else if (changed(newNode, oldNode)) {
-    $parent.replaceChild(createElement(newNode), $parent.childNodes[index]);
-  } else if (newNode.type) {
-    updateAttrs($parent.childNodes[index], newNode.attrs, oldNode.attrs);
-    const newLength = newNode.children.length;
-    const oldLength = oldNode.children.length;
+    // console.log("replace", newNode);
+    parent.replaceChild(newNode, oldNode);
+  } else if (newNode.tagName) {
+    updateAttrs(oldNode, newNode);
+    const newLength = newNode.childNodes.length;
+    const oldLength = oldNode.childNodes.length;
     const start = (newLength > oldLength ? newLength : oldLength) - 1;
     for (let i = start; i >= 0; i--) {
-      updateElement(
-        $parent.childNodes[index],
-        newNode.children[i],
-        oldNode.children[i],
-        i
-      );
+      updateElement(oldNode, newNode.childNodes[i], i);
     }
   }
 }
