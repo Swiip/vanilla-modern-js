@@ -1,0 +1,64 @@
+<template>
+  <root></root>
+
+  <style>
+  .grid-cell {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    border-radius: 3px;
+    background-color: #cdc1b4;
+  }
+  </style>
+</template>
+
+<script>
+window.docs.Grid = document.currentScript.ownerDocument;
+</script>
+
+<script type="module">
+import { range } from "/utils/utils.js";
+
+import { update } from "/render/render.js";
+import { dom } from "/render/parser.js";
+
+import { size } from "/game/conf.js";
+
+class Grid extends HTMLElement {
+  constructor() {
+    super();
+
+    console.log("Grid Constructor");
+
+    this.attachShadow({ mode: "open" });
+
+    const template = window.docs.Grid.querySelector("template");
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.root = this.shadowRoot.querySelector("root");
+  }
+
+  connectedCallback() {
+    const newDom = dom`
+      <div class="grid-container">
+        ${range(size)
+          .map(x =>
+            range(size)
+              .map(
+                y =>
+                  `<div
+                    class="grid-cell"
+                    style="top: ${20 + 120 * y}px; left: ${20 + 120 * x}px;">
+                  </div>`
+              )
+              .join("")
+          )
+          .join("")}
+      </div>
+    `;
+
+    update(this.root, newDom);
+  }
+}
+
+customElements.define("swiip-grid", Grid);
+</script>

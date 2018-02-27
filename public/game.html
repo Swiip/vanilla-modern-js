@@ -1,5 +1,11 @@
+<link rel="import" href="grid.html">
+<link rel="import" href="tiles.html">
+
 <template>
-  <root></root>
+  <div class="game-container">
+    <swiip-grid></swiip-grid>
+    <swiip-tiles></swiip-tiles>
+  </div>
 
   <style>
   .game-container {
@@ -11,109 +17,6 @@
     height: 500px;
     box-sizing: border-box;
   }
-
-  .grid-cell {
-    position: absolute;
-    height: 100px;
-    width: 100px;
-    border-radius: 3px;
-    background-color: #cdc1b4;
-  }
-
-  .tile {
-    position: absolute;
-    height: 100px;
-    width: 100px;
-    border-radius: 3px;
-    z-index: 10;
-    font-weight: bold;
-    font-size: 55px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    transition: all .3s ease;
-    animation: .3s appear;
-  }
-
-  .merged {
-    z-index: 9;
-  }
-
-  .tile2 {
-    background-color: #eee4da;
-  }
-
-  .tile4 {
-    background-color: #ede0c8;
-  }
-
-  .tile8 {
-    color: #f9f6f2;
-    background: #f2b179;
-  }
-
-  .tile16 {
-    color: #f9f6f2;
-    background: #f59563;
-  }
-
-  .tile32 {
-    color: #f9f6f2;
-    background: #f67c5f;
-  }
-
-  .tile64 {
-    color: #f9f6f2;
-    background: #f65e3b;
-  }
-
-  .tile128 {
-    color: #f9f6f2;
-    background: #edcf72;
-    font-size: 45px;
-  }
-
-  .tile256 {
-    color: #f9f6f2;
-    background: #edcc61;
-    font-size: 45px;
-  }
-
-  .tile512 {
-    color: #f9f6f2;
-    background: #edc850;
-    font-size: 45px;
-  }
-
-  .tile1024 {
-    color: #f9f6f2;
-    background: #edc53f;
-    font-size: 35px;
-  }
-
-  .tile2048 {
-    color: #f9f6f2;
-    background: #edc22e;
-    font-size: 35px;
-  }
-
-   @keyframes appear {
-     from {
-       height: 0;
-       width: 0;
-       opacity: 0;
-       margin-top: 50px;
-       margin-left: 50px;
-     }
-     to {
-       height: 100px;
-       width: 100px;
-       opacity: 1;
-       margin-top: 0;
-       margin-left: 0;
-     }
-   }
   </style>
 </template>
 
@@ -122,15 +25,8 @@ window.docs.Game = document.currentScript.ownerDocument;
 </script>
 
 <script type="module">
-import { range } from "/utils/utils.js";
-
 import store from "/logic/store.js";
 import { move } from "/logic/actions.js";
-
-import { update } from "/render/render.js";
-import { dom } from "/render/parser.js";
-
-import { size } from "/game/conf.js";
 
 class Game extends HTMLElement {
   constructor() {
@@ -146,71 +42,11 @@ class Game extends HTMLElement {
   }
 
   connectedCallback() {
-    this.tiles = {};
-
-    store.subscribe(() => this.updateTiles());
-    this.updateTiles();
-
     this.listenKeyboard();
   }
 
   listenKeyboard() {
     window.addEventListener("keydown", event => this.keyHandler(event));
-  }
-
-  updateTiles() {
-    const { board } = store.getState();
-
-    const tiles = [];
-
-    board.forEach(rows => {
-      rows.forEach(cell => {
-        if (cell.value > 0) {
-          tiles.push(cell);
-        }
-        if (Array.isArray(cell.mergedTiles)) {
-          tiles.push(...cell.mergedTiles);
-        }
-      });
-    });
-
-    const newDom = dom`
-      <div class="game-container">
-        <div class="grid-container">
-          ${range(size)
-            .map(x =>
-              range(size)
-                .map(
-                  y =>
-                    `<div
-                      class="grid-cell"
-                      style="top: ${20 + 120 * y}px; left: ${20 + 120 * x}px;">
-                    </div>`
-                )
-                .join("")
-            )
-            .join("")}
-        </div>
-        <div class="tile-container">
-          ${tiles
-            .map(
-              tile =>
-                `<div
-                  key="${tile.id}"
-                  class="tile tile${tile.value} ${tile.merged ? "merged" : ""}"
-                  style="top: ${20 + 120 * tile.row}px; left: ${20 +
-                  120 * tile.column}px;">
-                  ${tile.value}
-                </div>`
-            )
-            .join("")}
-        </div>
-      </div>
-    `;
-
-    console.log("next dom", newDom);
-
-    update(this.root, newDom);
   }
 
   keyHandler(event) {
