@@ -1,7 +1,10 @@
+<link rel="import" href="grid.html">
+<link rel="import" href="tiles.html">
+
 <template>
   <div class="game-container">
-    <div class="grid-container"></div>
-    <div class="tile-container"></div>
+    <swiip-grid></swiip-grid>
+    <swiip-tiles></swiip-tiles>
   </div>
 
   <style>
@@ -14,105 +17,6 @@
     height: 500px;
     box-sizing: border-box;
   }
-
-  .grid-cell {
-    position: absolute;
-    height: 100px;
-    width: 100px;
-    border-radius: 3px;
-    background-color: #cdc1b4;
-  }
-
-  .tile {
-    position: absolute;
-    height: 100px;
-    width: 100px;
-    border-radius: 3px;
-    z-index: 10;
-    font-weight: bold;
-    font-size: 55px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    transition: all .3s ease;
-    animation: .3s appear;
-  }
-
-  .tile2 {
-    background-color: #eee4da;
-  }
-
-  .tile4 {
-    background-color: #ede0c8;
-  }
-
-  .tile8 {
-    color: #f9f6f2;
-    background: #f2b179;
-  }
-
-  .tile16 {
-    color: #f9f6f2;
-    background: #f59563;
-  }
-
-  .tile32 {
-    color: #f9f6f2;
-    background: #f67c5f;
-  }
-
-  .tile64 {
-    color: #f9f6f2;
-    background: #f65e3b;
-  }
-
-  .tile128 {
-    color: #f9f6f2;
-    background: #edcf72;
-    font-size: 45px;
-  }
-
-  .tile256 {
-    color: #f9f6f2;
-    background: #edcc61;
-    font-size: 45px;
-  }
-
-  .tile512 {
-    color: #f9f6f2;
-    background: #edc850;
-    font-size: 45px;
-  }
-
-  .tile1024 {
-    color: #f9f6f2;
-    background: #edc53f;
-    font-size: 35px;
-  }
-
-  .tile2048 {
-    color: #f9f6f2;
-    background: #edc22e;
-    font-size: 35px;
-  }
-
-   @keyframes appear {
-     from {
-       height: 0;
-       width: 0;
-       opacity: 0;
-       margin-top: 50px;
-       margin-left: 50px;
-     }
-     to {
-       height: 100px;
-       width: 100px;
-       opacity: 1;
-       margin-top: 0;
-       margin-left: 0;
-     }
-   }
   </style>
 </template>
 
@@ -121,12 +25,8 @@ window.docs.Game = document.currentScript.ownerDocument;
 </script>
 
 <script type="module">
-import { range } from "/utils/utils.js";
-
 import store from "/logic/store.js";
 import { move } from "/logic/actions.js";
-
-import { size } from "/game/conf.js";
 
 class Game extends HTMLElement {
   constructor() {
@@ -138,91 +38,15 @@ class Game extends HTMLElement {
 
     const template = window.docs.Game.querySelector("template");
     this.shadowRoot.appendChild(template.content.cloneNode(true));
+    this.root = this.shadowRoot.querySelector("root");
   }
 
   connectedCallback() {
-    this.tileContainer = this.shadowRoot.querySelector(".tile-container");
-    this.tiles = {};
-
-    this.buildGrid();
-
-    store.subscribe(() => this.updateTiles());
-    this.updateTiles();
-
     this.listenKeyboard();
-  }
-
-  buildGrid() {
-    const gameContainer = this.shadowRoot.querySelector(".grid-container");
-    range(size).forEach(x => {
-      range(size).forEach(y => {
-        const cell = document.createElement("div");
-        cell.classList.add("grid-cell");
-        cell.style.top = `${20 + 120 * y}px`;
-        cell.style.left = `${20 + 120 * x}px`;
-        gameContainer.appendChild(cell);
-      });
-    });
   }
 
   listenKeyboard() {
     window.addEventListener("keydown", event => this.keyHandler(event));
-  }
-
-  addTile(cell) {
-    const tile = document.createElement("div");
-    this.updateTile(tile, cell);
-    this.tileContainer.appendChild(tile);
-    return tile;
-  }
-
-  updateTile(tile, cell) {
-    tile.className = "";
-    tile.classList.add("tile");
-    tile.classList.add(`tile${cell.value}`);
-    tile.style.top = `${20 + 120 * cell.row}px`;
-    tile.style.left = `${20 + 120 * cell.column}px`;
-    tile.textContent = cell.value;
-  }
-
-  updateMergedTile(tile, cell) {
-    this.updateTile(tile, cell);
-    tile.classList.add("merged");
-  }
-
-  updateTiles() {
-    const tileContainer = this.shadowRoot.querySelector(".tile-container");
-
-    const { board } = store.getState();
-
-    const newTiles = {};
-
-    board.forEach(rows => {
-      rows.forEach(cell => {
-        if (this.tiles.hasOwnProperty(cell.id)) {
-          this.updateTile(this.tiles[cell.id], cell);
-          newTiles[cell.id] = this.tiles[cell.id];
-        } else if (cell.value > 0) {
-          const newTile = this.addTile(cell);
-          newTiles[cell.id] = newTile;
-        }
-        if (Array.isArray(cell.merged)) {
-          cell.merged.forEach(mergedCell => {
-            this.updateMergedTile(this.tiles[mergedCell.id], cell);
-            newTiles[mergedCell.id] = this.tiles[mergedCell.id];
-          });
-        }
-      });
-    });
-
-    const existingTiles = tileContainer.querySelectorAll(".tile");
-    existingTiles.forEach(existingTile => {
-      if (!Object.values(newTiles).includes(existingTile)) {
-        existingTile.remove();
-      }
-    });
-
-    this.tiles = newTiles;
   }
 
   keyHandler(event) {

@@ -22,6 +22,8 @@
 
 * Redux clone to manage game state
 
+* Virtual Dom implementation using native HTML parser & diffing directly on real dom
+
 ## Application
 
 2048 clone. It's fun, doesn't need backend and is rich enough to trigger some real questions
