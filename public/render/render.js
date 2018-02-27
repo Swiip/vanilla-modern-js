@@ -1,4 +1,4 @@
-import { forEach } from "/utils/utils.js";
+import { forEach, find } from "/utils/utils.js";
 
 function updateAttr(target, name, newAttr, oldAttr) {
   if (!newAttr) {
@@ -28,25 +28,73 @@ function changed(node1, node2) {
   );
 }
 
-export function updateElement(parent, newNode, index = 0) {
-  const oldNode = parent.childNodes[index];
-  // console.log("updateElement", parent, newNode, oldNode, index);
+function makeChildPairs(oldNode, newNode) {
+  const pairs = [];
+
+  // Matching keys
+  forEach(oldNode.childNodes, oldChildNode => {
+    if (oldChildNode.attributes && oldChildNode.attributes.key) {
+      const match = find(newNode.childNodes, newChildNode => {
+        return (
+          newChildNode.attributes &&
+          newChildNode.attributes.key &&
+          oldChildNode.attributes.key.value ===
+            newChildNode.attributes.key.value
+        );
+      });
+      if (match) {
+        pairs.push([oldChildNode, match]);
+      } else {
+        pairs.push([oldChildNode, undefined]);
+      }
+    }
+  });
+
+  // Others
+  let oldIndex = 0;
+  let newIndex = 0;
+
+  while (
+    oldIndex < oldNode.childNodes.length ||
+    newIndex < newNode.childNodes.length
+  ) {
+    const oldChildNode = oldNode.childNodes[oldIndex];
+    const newChildNode = newNode.childNodes[newIndex];
+    if (
+      oldChildNode !== undefined &&
+      pairs.find(pair => oldChildNode === pair[0])
+    ) {
+      oldIndex++;
+    } else if (
+      newChildNode !== undefined &&
+      pairs.find(pair => newChildNode === pair[1])
+    ) {
+      newIndex++;
+    } else {
+      pairs.push([oldChildNode, newChildNode]);
+      oldIndex++;
+      newIndex++;
+    }
+  }
+
+  return pairs;
+}
+
+function updateElement(parent, newNode, oldNode) {
   if (!oldNode) {
-    // console.log("append", newNode);
     parent.appendChild(newNode);
   } else if (!newNode) {
-    // console.log("remove", oldNode);
     parent.removeChild(oldNode);
   } else if (changed(newNode, oldNode)) {
-    // console.log("replace", newNode);
     parent.replaceChild(newNode, oldNode);
   } else if (newNode.tagName) {
     updateAttrs(oldNode, newNode);
-    const newLength = newNode.childNodes.length;
-    const oldLength = oldNode.childNodes.length;
-    const start = (newLength > oldLength ? newLength : oldLength) - 1;
-    for (let i = start; i >= 0; i--) {
-      updateElement(oldNode, newNode.childNodes[i], i);
-    }
+    makeChildPairs(oldNode, newNode).forEach(pair => {
+      updateElement(oldNode, pair[1], pair[0]);
+    });
   }
+}
+
+export function update(parent, newNode) {
+  updateElement(parent, newNode, parent.childNodes[0]);
 }
