@@ -22,9 +22,11 @@
 
 * CSS Grid (used it for the grid but not possible for the tiles as long as transitions doesn't work)
 
+* Virtual Dom implementation using native HTML parser & diffing directly on real dom
+
 * Redux clone to manage game state
 
-* Virtual Dom implementation using native HTML parser & diffing directly on real dom
+* Logic in a WebWorker, unfortunately without modules as they are not yet supported
 
 ## Application
 

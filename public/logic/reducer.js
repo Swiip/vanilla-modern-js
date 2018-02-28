@@ -1,9 +1,9 @@
-import { MOVE, START, ADD_TILE, UPDATE } from "/logic/actions.js";
+// import { MOVE, START, ADD_TILE, UPDATE } from "/logic/actions.js";
 
-import { init } from "/game/init.js";
-import { addTile } from "/game/add.js";
-import { update } from "/game/tile.js";
-import { move } from "/game/move.js";
+// import { init } from "/game/init.js";
+// import { addTile } from "/game/add.js";
+// import { update } from "/game/tile.js";
+// import { move } from "/game/move.js";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -34,4 +34,4 @@ const reducer = (state, action) => {
   }
 };
 
-export default reducer;
+// export default reducer;

@@ -1,9 +1,9 @@
-import { times, range } from "/utils/utils.js";
+// import { times, range } from "/utils/utils.js";
 
-import { size } from "/game/conf.js";
-import { createTile } from "/game/tile.js";
+// import { size } from "/game/conf.js";
+// import { createTile } from "/game/tile.js";
 
-export function move(board, direction) {
+/* export */ function move(board, direction) {
   // 0 -> left, 1 -> up, 2 -> right, 3 -> down
   times(direction, () => {
     board = rotateLeft(board);

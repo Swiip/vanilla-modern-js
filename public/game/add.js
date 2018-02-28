@@ -1,9 +1,9 @@
-import { fourProbability } from "/game/conf.js";
-import { createTile } from "/game/tile.js";
+// import { fourProbability } from "/game/conf.js";
+// import { createTile } from "/game/tile.js";
 
-import { flatten } from "/utils/utils.js";
+// import { flatten } from "/utils/utils.js";
 
-export function chooseRandomTile(board) {
+/* export */ function chooseRandomTile(board) {
   const emptyCells = flatten(
     board.map((row, rowIndex) => {
       return row.map((tile, columnIndex) => {
@@ -21,7 +21,7 @@ export function chooseRandomTile(board) {
   };
 }
 
-export function addTile(board, rowIndex, columnIndex, value) {
+/* export */ function addTile(board, rowIndex, columnIndex, value) {
   return board.map((row, r) => {
     return row.map((tile, c) => {
       if (r === rowIndex && c === columnIndex) {

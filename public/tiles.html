@@ -106,13 +106,15 @@ window.docs.Tiles = document.currentScript.ownerDocument;
 <script type="module">
 import { range } from "/utils/utils.js";
 
-import store from "/logic/store.js";
-import { move } from "/logic/actions.js";
+// import store from "/logic/store.js";
+// import { move } from "/logic/actions.js";
+import { store } from "/index.js";
 
 import { update } from "/render/render.js";
 import { dom } from "/render/parser.js";
 
-import { size } from "/game/conf.js";
+// import { size } from "/game/conf.js";
+const size = 4;
 
 class Tiles extends HTMLElement {
   constructor() {
@@ -128,12 +130,17 @@ class Tiles extends HTMLElement {
   }
 
   connectedCallback() {
+    // console.log("tiles", worker);
     store.subscribe(() => this.updateTiles());
     this.updateTiles();
   }
 
   updateTiles() {
     const { board } = store.getState();
+
+    if (!board) {
+      return;
+    }
 
     const tiles = [];
 

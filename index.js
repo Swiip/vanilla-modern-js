@@ -16,6 +16,12 @@ const extTypeMap = {
   ".css": "text/css"
 };
 
+const acceptedRequests = {
+  "/": "/index.html",
+  "/index.html": "/index.html",
+  "/logic/worker.js": "/logic/worker.js"
+};
+
 const server = http2.createSecureServer({
   key: fs.readFileSync("certs/localhost-privkey.pem"),
   cert: fs.readFileSync("certs/localhost-cert.pem")
@@ -51,12 +57,14 @@ const push = (stream, filePath) => {
 server.on("stream", async (stream, headers) => {
   console.log("request", headers[":path"]);
 
-  if (headers[":path"] === "/" || headers[":path"] === "/index.html") {
-    const pushFiles = await findPushFiles("index.html");
+  if (Object.keys(acceptedRequests).includes(headers[":path"])) {
+    const request = acceptedRequests[headers[":path"]];
+    let pushFiles = await findPushFiles(request);
+    pushFiles = Array.from(new Set(pushFiles));
     pushFiles.forEach(pushFile => {
       push(stream, pushFile);
     });
-    send(stream, "index.html");
+    send(stream, request);
   } else {
     stream.respond({ ":status": 404 });
     stream.end();

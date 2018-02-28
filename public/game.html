@@ -25,8 +25,10 @@ window.docs.Game = document.currentScript.ownerDocument;
 </script>
 
 <script type="module">
-import store from "/logic/store.js";
-import { move } from "/logic/actions.js";
+// import store from "/logic/store.js";
+// import { move } from "/logic/actions.js";
+
+import { store } from "/index.js";
 
 class Game extends HTMLElement {
   constructor() {
@@ -57,7 +59,11 @@ class Game extends HTMLElement {
       ArrowDown: 3
     };
     if (keyMapping[event.key] !== undefined) {
-      move(keyMapping[event.key], store);
+      // move(keyMapping[event.key], store);
+      store.dispatch({
+        type: "metaActionMove",
+        payload: keyMapping[event.key]
+      });
       event.preventDefault();
     }
   }
