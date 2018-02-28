@@ -2,6 +2,21 @@
   <root></root>
 
   <style>
+  .grid-container {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(4, 100px);
+    grid-gap: 20px 20px;
+    justify-content: center;
+    align-content: center;
+  }
+
   .grid-cell {
     position: absolute;
     height: 100px;
@@ -47,7 +62,7 @@ class Grid extends HTMLElement {
                 y =>
                   `<div
                     class="grid-cell"
-                    style="top: ${20 + 120 * y}px; left: ${20 + 120 * x}px;">
+                    style="grid-area: ${x + 1} / ${y + 1};">
                   </div>`
               )
               .join("")

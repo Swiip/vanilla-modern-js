@@ -18,7 +18,9 @@
 
 * Web Components : Custom Elements / HTML Imports / Shadow Dom
 
-* CSS variables (looking for more advanced CSS features to use)
+* CSS Variables
+
+* CSS Grid (used it for the grid but not possible for the tiles as long as transitions doesn't work)
 
 * Redux clone to manage game state
 
