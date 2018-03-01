@@ -3,7 +3,7 @@
 
 // import { flatten } from "/utils/utils.js";
 
-/* export */ function chooseRandomTile(board) {
+/* export */ function chooseRandomTile(board, randomPosition, randomValue) {
   const emptyCells = flatten(
     board.map((row, rowIndex) => {
       return row.map((tile, columnIndex) => {
@@ -11,9 +11,9 @@
       });
     })
   ).filter(tile => tile.value === 0);
-  const index = ~~(Math.random() * emptyCells.length);
+  const index = ~~(randomPosition * emptyCells.length);
   const cell = emptyCells[index];
-  const value = Math.random() < fourProbability ? 4 : 2;
+  const value = randomValue < fourProbability ? 4 : 2;
   return {
     row: cell.rowIndex,
     column: cell.columnIndex,

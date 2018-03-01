@@ -26,7 +26,7 @@ window.docs.Game = document.currentScript.ownerDocument;
 
 <script type="module">
 // import store from "/logic/store.js";
-// import { move } from "/logic/actions.js";
+// im port { move } from "/logic/actions.js";
 
 import { store } from "/index.js";
 
@@ -60,9 +60,15 @@ class Game extends HTMLElement {
     };
     if (keyMapping[event.key] !== undefined) {
       // move(keyMapping[event.key], store);
+      // store.dispatch({
+      //   type: "metaActionMove",
+      //   payload: keyMapping[event.key]
+      // });
       store.dispatch({
-        type: "metaActionMove",
-        payload: keyMapping[event.key]
+        type: "MOVE",
+        direction: keyMapping[event.key],
+        randomPosition: Math.random(),
+        randomValue: Math.random()
       });
       event.preventDefault();
     }

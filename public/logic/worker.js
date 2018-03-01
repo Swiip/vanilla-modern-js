@@ -9,15 +9,18 @@ importScripts("/game/add.js");
 importScripts("/game/init.js");
 importScripts("/game/move.js");
 importScripts("/logic/reducer.js");
-importScripts("/logic/actions.js");
 importScripts("/logic/store.js");
 
-onmessage = ({ data: { type, payload } }) => {
-  self[type](payload, store);
+onmessage = ({ data }) => {
+  store.dispatch(data);
 };
 
 store.subscribe(() => {
   postMessage(store.getState());
 });
 
-metaActionStart(store);
+store.dispatch({
+  type: "START",
+  randomPosition: Math.random(),
+  randomValue: Math.random()
+});

@@ -1,4 +1,4 @@
-// import { MOVE, START, ADD_TILE, UPDATE } from "/logic/actions.js";
+// im port { MOVE, START, ADD_TILE, UPDATE } from "/logic/actions.js";
 
 // import { init } from "/game/init.js";
 // import { addTile } from "/game/add.js";
@@ -7,26 +7,32 @@
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case START: {
-      return {
+    case "START": {
+      let newState = {
         board: init(),
         changed: false
       };
+      const { row, column, value } = chooseRandomTile(
+        newState.board,
+        action.randomPosition,
+        action.randomValue
+      );
+      newState.board = addTile(newState.board, row, column, value);
+      newState.board = update(newState.board);
+      return newState;
     }
-    case MOVE: {
-      return move(state.board, action.direction);
-    }
-    case ADD_TILE: {
-      return {
-        ...state,
-        board: addTile(state.board, action.row, action.column, action.value)
-      };
-    }
-    case UPDATE: {
-      return {
-        ...state,
-        board: update(state.board)
-      };
+    case "MOVE": {
+      let newState = move(state.board, action.direction);
+      if (newState.changed) {
+        const { row, column, value } = chooseRandomTile(
+          newState.board,
+          action.randomPosition,
+          action.randomValue
+        );
+        newState.board = addTile(newState.board, row, column, value);
+      }
+      newState.board = update(newState.board);
+      return newState;
     }
     default: {
       return state;

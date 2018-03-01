@@ -1,4 +1,4 @@
-// import { start } from "/logic/actions.js";
+// im port { start } from "/logic/actions.js";
 // import reducer from "/logic/reducer.js";
 
 const createStore = reducer => {

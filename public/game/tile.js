@@ -7,8 +7,7 @@ let tileId = 0;
     row: row || -1,
     column: column || -1,
     oldRow: -1,
-    oldColumn: -1,
-    classes: []
+    oldColumn: -1
   };
 }
 
@@ -24,18 +23,12 @@ let tileId = 0;
 }
 
 /* export */ function update(board) {
-  const updateBoth = (tile, row, column, merged) => {
-    tile = updatePositions(tile, row, column);
-    // tile = updateClasses(tile, merged);
-    return tile;
-  };
-
   return board.map((row, rowIndex) => {
     return row.map((tile, columnIndex) => {
-      tile = updateBoth(tile, rowIndex, columnIndex, false);
+      tile = updatePositions(tile, rowIndex, columnIndex);
       if (tile.mergedTiles) {
         tile.mergedTiles = tile.mergedTiles.map(tile => {
-          return updateBoth(tile, rowIndex, columnIndex, true);
+          return updatePositions(tile, rowIndex, columnIndex);
         });
       }
       return tile;
