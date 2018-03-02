@@ -1,5 +1,7 @@
 import { forEach, find } from "/utils/utils.js";
 
+const domParser = new DOMParser();
+
 function updateAttr(target, name, newAttr, oldAttr) {
   if (!newAttr) {
     target.removeAttribute(name);
@@ -95,6 +97,13 @@ function updateElement(parent, newNode, oldNode) {
   }
 }
 
-export function update(parent, newNode) {
-  updateElement(parent, newNode, parent.childNodes[0]);
+function parse(htmlString) {
+  const doc = domParser.parseFromString(htmlString, "text/html");
+
+  // DomParser with text/html recreates html / body each times
+  return doc.querySelector("body > *");
+}
+
+export function update(parent, htmlString) {
+  updateElement(parent, parse(htmlString), parent.childNodes[0]);
 }

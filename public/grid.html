@@ -35,9 +35,8 @@ window.docs.Grid = document.currentScript.ownerDocument;
 import { range } from "/utils/utils.js";
 
 import { update } from "/render/render.js";
-import { dom } from "/render/parser.js";
 
-// import { size } from "/game/conf.js";
+// im port { size } from "/game/conf.js";
 const size = 4;
 
 class Grid extends HTMLElement {
@@ -54,7 +53,7 @@ class Grid extends HTMLElement {
   }
 
   connectedCallback() {
-    const newDom = dom`
+    const newHtml = `
       <div class="grid-container">
         ${range(size)
           .map(x =>
@@ -72,7 +71,7 @@ class Grid extends HTMLElement {
       </div>
     `;
 
-    update(this.root, newDom);
+    update(this.root, newHtml);
   }
 }
 

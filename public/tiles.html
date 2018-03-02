@@ -109,9 +109,8 @@ import { range } from "/utils/utils.js";
 import { store } from "/logic/connector.js";
 
 import { update } from "/render/render.js";
-import { dom } from "/render/parser.js";
 
-// import { size } from "/game/conf.js";
+// im port { size } from "/game/conf.js";
 const size = 4;
 
 class Tiles extends HTMLElement {
@@ -153,7 +152,7 @@ class Tiles extends HTMLElement {
       });
     });
 
-    const newDom = dom`
+    const newHtml = `
       <div class="tile-container">
         ${tiles
           .map(
@@ -170,9 +169,7 @@ class Tiles extends HTMLElement {
       </div>
     `;
 
-    console.log("next dom", newDom);
-
-    update(this.root, newDom);
+    update(this.root, newHtml);
   }
 }
 
