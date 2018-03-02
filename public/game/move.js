@@ -1,7 +1,7 @@
-// import { times, range } from "/utils/utils.js";
+// im port { times, range } from "/utils/utils.js";
 
-// import { size } from "/game/conf.js";
-// import { createTile } from "/game/tile.js";
+// im port { size } from "/game/conf.js";
+// im port { createTile } from "/game/tile.js";
 
 /* export */ function move(board, direction) {
   // 0 -> left, 1 -> up, 2 -> right, 3 -> down

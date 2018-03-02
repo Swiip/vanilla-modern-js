@@ -1,4 +1,4 @@
-import { size, end } from "./conf";
+// im port { size, end } from "./conf";
 
 const deltaX = [-1, 0, 1, 0];
 const deltaY = [0, -1, 0, 1];

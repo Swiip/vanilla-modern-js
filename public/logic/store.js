@@ -1,21 +1,22 @@
+// im port store from "/logic/store.js";
+// Sadly it does not work yet :
+// https://stackoverflow.com/questions/44118600/web-workers-how-to-import-modules
+
+importScripts("/utils/utils.no-module.js");
+importScripts("/game/conf.js");
+importScripts("/game/tile.js");
+importScripts("/game/add.js");
+importScripts("/game/init.js");
+importScripts("/game/move.js");
+importScripts("/logic/reducer.js");
+
 // im port { start } from "/logic/actions.js";
-// import reducer from "/logic/reducer.js";
+// im port reducer from "/logic/reducer.js";
 
-const createStore = reducer => {
-  let state = {};
-  const subscribers = [];
-  const getState = () => state;
-  const subscribe = listener => subscribers.push(listener);
-  const dispatch = action => {
-    state = reducer(state, action);
-    console.log("dispatched", action, state);
-    subscribers.forEach(subscriber => subscriber());
-  };
-  return { getState, subscribe, dispatch };
+let state = {};
+
+onmessage = ({ data }) => {
+  state = reducer(state, data);
+  console.log("dispatched", data, state);
+  postMessage(state);
 };
-
-const store = createStore(reducer);
-
-// start(store);
-
-// export default store;

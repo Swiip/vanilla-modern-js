@@ -26,6 +26,8 @@ const findPushFiles = async requestPath => {
   const filePath = path.join(__dirname, "public", requestPath);
   const ext = path.extname(filePath);
 
+  console.log("find", requestPath);
+
   if (!pushTypes.includes(ext)) {
     return [];
   }

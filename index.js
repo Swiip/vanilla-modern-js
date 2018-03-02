@@ -19,7 +19,7 @@ const extTypeMap = {
 const acceptedRequests = {
   "/": "/index.html",
   "/index.html": "/index.html",
-  "/logic/worker.js": "/logic/worker.js"
+  "/logic/store.js": "/logic/store.js"
 };
 
 const server = http2.createSecureServer({

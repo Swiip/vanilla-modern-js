@@ -1,7 +1,7 @@
-// import { range } from "/utils/utils.js";
+// im port { range } from "/utils/utils.js";
 
-// import { size } from "/game/conf.js";
-// import { createTile } from "/game/tile.js";
+// im port { size } from "/game/conf.js";
+// im port { createTile } from "/game/tile.js";
 
 /* export */ function init() {
   const dimension = range(size);
