@@ -1,13 +1,12 @@
 <link rel="import" href="another.html">
+
 <template>
   <h1>Hello <span></span>!!</h1>
 </template>
 
-<script>
-window.docs.Hello = document.currentScript.ownerDocument;
-</script>
-
 <script type="module">
+import { attachShadow } from "/render/components.js";
+
 import { who } from "./hello.js";
 
 class Hello extends HTMLElement {
@@ -27,11 +26,7 @@ class Hello extends HTMLElement {
   constructor() {
     super();
 
-    console.log("Constructor", who);
-
-    const template = window.docs.Hello.querySelector("template");
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
+    attachShadow.call(this, "hello.html");
 
     this.whoChanged();
   }

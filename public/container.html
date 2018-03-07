@@ -11,23 +11,17 @@
   </style>
 </template>
 
-<script>
-window.docs.Container = document.currentScript.ownerDocument;
-</script>
-
 <script type="module">
-class Container extends HTMLElement {
-  constructor() {
-    super();
+import { attachShadow } from "/render/components.js";
 
-    console.log("Container Constructor");
+customElements.define(
+  "swiip-container",
+  class Container extends HTMLElement {
+    constructor() {
+      super();
 
-    this.attachShadow({ mode: "open" });
-
-    const template = window.docs.Container.querySelector("template");
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
+      attachShadow.call(this, "container.html");
+    }
   }
-}
-
-customElements.define("swiip-container", Container);
+);
 </script>

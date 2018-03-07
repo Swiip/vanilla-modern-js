@@ -17,6 +17,6 @@ let state = {};
 
 onmessage = ({ data }) => {
   state = reducer(state, data);
-  console.log("dispatched", data, state);
+  // console.log("dispatched", data, state);
   postMessage(state);
 };

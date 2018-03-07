@@ -27,33 +27,28 @@
   </style>
 </template>
 
-<script>
-window.docs.Grid = document.currentScript.ownerDocument;
-</script>
-
 <script type="module">
 import { range } from "/utils/utils.js";
 
+import { attachShadow } from "/render/components.js";
 import { update } from "/render/render.js";
 
 // im port { size } from "/game/conf.js";
 const size = 4;
 
-class Grid extends HTMLElement {
-  constructor() {
-    super();
+customElements.define(
+  "swiip-grid",
+  class Grid extends HTMLElement {
+    constructor() {
+      super();
 
-    console.log("Grid Constructor");
+      attachShadow.call(this, "grid.html");
 
-    this.attachShadow({ mode: "open" });
+      this.root = this.shadowRoot.querySelector("root");
+    }
 
-    const template = window.docs.Grid.querySelector("template");
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.root = this.shadowRoot.querySelector("root");
-  }
-
-  connectedCallback() {
-    const newHtml = `
+    connectedCallback() {
+      const newHtml = `
       <div class="grid-container">
         ${range(size)
           .map(x =>
@@ -71,9 +66,8 @@ class Grid extends HTMLElement {
       </div>
     `;
 
-    update(this.root, newHtml);
+      update(this.root, newHtml);
+    }
   }
-}
-
-customElements.define("swiip-grid", Grid);
+);
 </script>

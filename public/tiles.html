@@ -99,16 +99,13 @@
   </style>
 </template>
 
-<script>
-window.docs.Tiles = document.currentScript.ownerDocument;
-</script>
-
 <script type="module">
 import { range } from "/utils/utils.js";
 
-import { store } from "/logic/connector.js";
-
+import { attachShadow } from "/render/components.js";
 import { update } from "/render/render.js";
+
+import { store } from "/logic/connector.js";
 
 // im port { size } from "/game/conf.js";
 const size = 4;
@@ -117,12 +114,8 @@ class Tiles extends HTMLElement {
   constructor() {
     super();
 
-    console.log("Tiles Constructor");
+    attachShadow.call(this, "tiles.html");
 
-    this.attachShadow({ mode: "open" });
-
-    const template = window.docs.Tiles.querySelector("template");
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
     this.root = this.shadowRoot.querySelector("root");
   }
 

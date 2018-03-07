@@ -58,23 +58,17 @@
   </style>
 </template>
 
-<script>
-window.docs.Heading = document.currentScript.ownerDocument;
-</script>
-
 <script type="module">
-class Heading extends HTMLElement {
-  constructor() {
-    super();
+import { attachShadow } from "/render/components.js";
 
-    console.log("Heading Constructor");
+customElements.define(
+  "swiip-heading",
+  class Heading extends HTMLElement {
+    constructor() {
+      super();
 
-    this.attachShadow({ mode: "open" });
-
-    const template = window.docs.Heading.querySelector("template");
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
+      attachShadow.call(this, "heading.html");
+    }
   }
-}
-
-customElements.define("swiip-heading", Heading);
+);
 </script>

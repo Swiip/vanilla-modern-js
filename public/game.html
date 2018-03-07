@@ -20,52 +20,44 @@
   </style>
 </template>
 
-<script>
-window.docs.Game = document.currentScript.ownerDocument;
-</script>
-
 <script type="module">
+import { attachShadow } from "/render/components.js";
 import { store } from "/logic/connector.js";
 
-class Game extends HTMLElement {
-  constructor() {
-    super();
+customElements.define(
+  "swiip-game",
+  class Game extends HTMLElement {
+    constructor() {
+      super();
 
-    console.log("Game Constructor");
+      attachShadow.call(this, "game.html");
+    }
 
-    this.attachShadow({ mode: "open" });
+    connectedCallback() {
+      this.listenKeyboard();
+    }
 
-    const template = window.docs.Game.querySelector("template");
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.root = this.shadowRoot.querySelector("root");
-  }
+    listenKeyboard() {
+      window.addEventListener("keydown", event => this.keyHandler(event));
+    }
 
-  connectedCallback() {
-    this.listenKeyboard();
-  }
-
-  listenKeyboard() {
-    window.addEventListener("keydown", event => this.keyHandler(event));
-  }
-
-  keyHandler(event) {
-    const keyMapping = {
-      ArrowLeft: 0,
-      ArrowUp: 1,
-      ArrowRight: 2,
-      ArrowDown: 3
-    };
-    if (keyMapping[event.key] !== undefined) {
-      store.dispatch({
-        type: "MOVE",
-        direction: keyMapping[event.key],
-        randomPosition: Math.random(),
-        randomValue: Math.random()
-      });
-      event.preventDefault();
+    keyHandler(event) {
+      const keyMapping = {
+        ArrowLeft: 0,
+        ArrowUp: 1,
+        ArrowRight: 2,
+        ArrowDown: 3
+      };
+      if (keyMapping[event.key] !== undefined) {
+        store.dispatch({
+          type: "MOVE",
+          direction: keyMapping[event.key],
+          randomPosition: Math.random(),
+          randomValue: Math.random()
+        });
+        event.preventDefault();
+      }
     }
   }
-}
-
-customElements.define("swiip-game", Game);
+);
 </script>
