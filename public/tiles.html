@@ -102,69 +102,70 @@
 <script type="module">
 import { range } from "/utils/utils.js";
 
-import { attachShadow } from "/render/components.js";
-import { update } from "/render/render.js";
+import { attachTemplate } from "/render/components.js";
+import { render } from "/render/render.js";
 
 import { store } from "/logic/connector.js";
 
 // im port { size } from "/game/conf.js";
 const size = 4;
 
-class Tiles extends HTMLElement {
-  constructor() {
-    super();
+customElements.define(
+  "swiip-tiles",
+  class Tiles extends HTMLElement {
+    constructor() {
+      super();
 
-    attachShadow.call(this, "tiles.html");
+      attachTemplate.call(this, "tiles.html");
 
-    this.root = this.shadowRoot.querySelector("root");
-  }
-
-  connectedCallback() {
-    // console.log("tiles", worker);
-    store.subscribe(() => this.updateTiles());
-    this.updateTiles();
-  }
-
-  updateTiles() {
-    const { board } = store.getState();
-
-    if (!board) {
-      return;
+      this.root = this.shadowRoot.querySelector("root");
     }
 
-    const tiles = [];
+    connectedCallback() {
+      // console.log("tiles", worker);
+      store.subscribe(() => this.updateTiles());
+      this.updateTiles();
+    }
 
-    board.forEach(rows => {
-      rows.forEach(cell => {
-        if (cell.value > 0) {
-          tiles.push(cell);
-        }
-        if (Array.isArray(cell.mergedTiles)) {
-          tiles.push(...cell.mergedTiles);
-        }
+    updateTiles() {
+      const { board } = store.getState();
+
+      if (!board) {
+        return;
+      }
+
+      const tiles = [];
+
+      board.forEach(rows => {
+        rows.forEach(cell => {
+          if (cell.value > 0) {
+            tiles.push(cell);
+          }
+          if (Array.isArray(cell.mergedTiles)) {
+            tiles.push(...cell.mergedTiles);
+          }
+        });
       });
-    });
 
-    const newHtml = `
-      <div class="tile-container">
-        ${tiles
-          .map(
-            tile =>
-              `<div
-                key="${tile.id}"
-                class="tile tile${tile.value} ${tile.merged ? "merged" : ""}"
-                style="top: ${20 + 120 * tile.row}px; left: ${20 +
-                120 * tile.column}px;">
-                ${tile.value}
-              </div>`
-          )
-          .join("")}
-      </div>
-    `;
+      const newHtml = `
+        <div class="tile-container">
+          ${tiles
+            .map(
+              tile =>
+                `<div
+                  key="${tile.id}"
+                  class="tile tile${tile.value} ${tile.merged ? "merged" : ""}"
+                  style="top: ${20 + 120 * tile.row}px; left: ${20 +
+                  120 * tile.column}px;">
+                  ${tile.value}
+                </div>`
+            )
+            .join("")}
+        </div>
+      `;
 
-    update(this.root, newHtml);
+      render(this.root, newHtml);
+    }
   }
-}
-
-customElements.define("swiip-tiles", Tiles);
+);
 </script>

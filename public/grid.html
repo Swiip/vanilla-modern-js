@@ -30,8 +30,8 @@
 <script type="module">
 import { range } from "/utils/utils.js";
 
-import { attachShadow } from "/render/components.js";
-import { update } from "/render/render.js";
+import { attachTemplate } from "/render/components.js";
+import { render } from "/render/render.js";
 
 // im port { size } from "/game/conf.js";
 const size = 4;
@@ -42,31 +42,31 @@ customElements.define(
     constructor() {
       super();
 
-      attachShadow.call(this, "grid.html");
+      attachTemplate.call(this, "grid.html");
 
       this.root = this.shadowRoot.querySelector("root");
     }
 
     connectedCallback() {
       const newHtml = `
-      <div class="grid-container">
-        ${range(size)
-          .map(x =>
-            range(size)
-              .map(
-                y =>
-                  `<div
-                    class="grid-cell"
-                    style="grid-area: ${x + 1} / ${y + 1};">
-                  </div>`
-              )
-              .join("")
-          )
-          .join("")}
-      </div>
-    `;
+        <div class="grid-container">
+          ${range(size)
+            .map(x =>
+              range(size)
+                .map(
+                  y =>
+                    `<div
+                      class="grid-cell"
+                      style="grid-area: ${x + 1} / ${y + 1};">
+                    </div>`
+                )
+                .join("")
+            )
+            .join("")}
+        </div>
+      `;
 
-      update(this.root, newHtml);
+      render(this.root, newHtml);
     }
   }
 );

@@ -59,7 +59,7 @@
 </template>
 
 <script type="module">
-import { attachShadow } from "/render/components.js";
+import { attachTemplate } from "/render/components.js";
 
 customElements.define(
   "swiip-heading",
@@ -67,7 +67,7 @@ customElements.define(
     constructor() {
       super();
 
-      attachShadow.call(this, "heading.html");
+      attachTemplate.call(this, "heading.html");
     }
   }
 );

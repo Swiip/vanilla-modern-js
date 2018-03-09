@@ -12,7 +12,7 @@
 </template>
 
 <script type="module">
-import { attachShadow } from "/render/components.js";
+import { attachTemplate } from "/render/components.js";
 
 customElements.define(
   "swiip-container",
@@ -20,7 +20,7 @@ customElements.define(
     constructor() {
       super();
 
-      attachShadow.call(this, "container.html");
+      attachTemplate.call(this, "container.html");
     }
   }
 );

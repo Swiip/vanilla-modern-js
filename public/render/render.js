@@ -104,6 +104,6 @@ function parse(htmlString) {
   return doc.querySelector("body > *");
 }
 
-export function update(parent, htmlString) {
+export function render(parent, htmlString) {
   updateElement(parent, parse(htmlString), parent.childNodes[0]);
 }

@@ -21,7 +21,7 @@
 </template>
 
 <script type="module">
-import { attachShadow } from "/render/components.js";
+import { attachTemplate } from "/render/components.js";
 import { store } from "/logic/connector.js";
 
 customElements.define(
@@ -30,7 +30,7 @@ customElements.define(
     constructor() {
       super();
 
-      attachShadow.call(this, "game.html");
+      attachTemplate.call(this, "game.html");
     }
 
     connectedCallback() {

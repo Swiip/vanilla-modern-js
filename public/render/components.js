@@ -17,7 +17,7 @@ function findImport(documentPath, doc = document) {
   );
 }
 
-export function attachShadow(documentPath, selector = "template") {
+export function attachTemplate(documentPath, selector = "template") {
   const template = findImport(documentPath).querySelector(selector);
 
   this.attachShadow({ mode: "open" });

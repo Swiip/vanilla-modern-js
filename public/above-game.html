@@ -30,7 +30,7 @@
 </template>
 
 <script type="module">
-import { attachShadow } from "/render/components.js";
+import { attachTemplate } from "/render/components.js";
 
 customElements.define(
   "swiip-above-game",
@@ -38,7 +38,7 @@ customElements.define(
     constructor() {
       super();
 
-      attachShadow.call(this, "above-game.html");
+      attachTemplate.call(this, "above-game.html");
     }
   }
 );
