@@ -3,19 +3,19 @@
 const deltaX = [-1, 0, 1, 0];
 const deltaY = [0, -1, 0, 1];
 
-export function hasWon(board) {
+/* export */ function hasWon(board) {
   return (
-    _.flatten(board.map(row => row.filter(column => column.value >= end)))
+    flatten(board.map(row => row.filter(column => column.value >= end)))
       .length > 0
   );
 }
 
-export function hasLost(board) {
+/* export */ function hasLost(board) {
   let canMove = false;
-  _.range(size).forEach(row => {
-    _.range(size).forEach(column => {
+  range(size).forEach(row => {
+    range(size).forEach(column => {
       canMove |= board[row][column].value === 0;
-      _.range(4).forEach(direction => {
+      range(4).forEach(direction => {
         const newRow = row + deltaX[direction];
         const newColumn = column + deltaY[direction];
         if (

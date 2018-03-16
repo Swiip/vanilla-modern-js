@@ -8,6 +8,7 @@ importScripts("/game/tile.js");
 importScripts("/game/add.js");
 importScripts("/game/init.js");
 importScripts("/game/move.js");
+importScripts("/game/end.js");
 importScripts("/logic/reducer.js");
 
 // im port { start } from "/logic/actions.js";
@@ -17,6 +18,6 @@ let state = {};
 
 onmessage = ({ data }) => {
   state = reducer(state, data);
-  // console.log("dispatched", data, state);
+  console.log("dispatched", data, state);
   postMessage(state);
 };

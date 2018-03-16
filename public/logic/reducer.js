@@ -10,7 +10,9 @@ const reducer = (state, action) => {
     case "START": {
       let newState = {
         board: init(),
-        changed: false
+        changed: false,
+        won: false,
+        lost: false
       };
       const { row, column, value } = chooseRandomTile(
         newState.board,
@@ -32,6 +34,8 @@ const reducer = (state, action) => {
         newState.board = addTile(newState.board, row, column, value);
       }
       newState.board = update(newState.board);
+      newState.won = hasWon(newState.board);
+      newState.lost = hasLost(newState.board);
       return newState;
     }
     default: {
