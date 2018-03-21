@@ -1,6 +1,7 @@
-import { who } from "./hello.js";
-
-console.log("Hello", who, "!!");
+import "/components/container.js";
+import "/components/heading.js";
+import "/components/above-game.js";
+import "/components/game.js";
 
 import { store } from "/logic/connector.js";
 

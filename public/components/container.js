@@ -1,4 +1,4 @@
-<template>
+const template = `
   <div class="container">
     <slot></slot>
   </div>
@@ -9,10 +9,7 @@
     margin: 0 auto;
   }
   </style>
-</template>
-
-<script type="module">
-import { attachTemplate } from "/render/components.js";
+`;
 
 customElements.define(
   "swiip-container",
@@ -20,8 +17,8 @@ customElements.define(
     constructor() {
       super();
 
-      attachTemplate.call(this, "container.html");
+      this.attachShadow({ mode: "open" });
+      this.shadowRoot.innerHTML = template;
     }
   }
 );
-</script>

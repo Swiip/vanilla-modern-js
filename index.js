@@ -27,10 +27,10 @@ const server = http2.createSecureServer({
   cert: fs.readFileSync("certs/localhost-cert.pem")
 });
 
-server.on("error", err => console.error(err));
+server.on("error", err => console.error("error", err));
 server.on("socketError", err => console.error(err));
 
-const send = async (stream, requestPath) => {
+const send = async (stream, requestPath, log = "send") => {
   const filePath = path.join(__dirname, "public", requestPath);
   const fd = await open(filePath, "r");
 
@@ -40,17 +40,17 @@ const send = async (stream, requestPath) => {
   const headers = {
     "content-length": statData.size,
     "last-modified": statData.mtime.toUTCString(),
-    "content-type": extTypeMap[ext]
+    "content-type": `${extTypeMap[ext]}; charset=utf-8`
   };
 
-  console.log("send", requestPath);
+  console.log(log, requestPath);
 
   stream.respondWithFD(fd, headers);
 };
 
-const push = (stream, filePath) => {
+const push = (stream, filePath, from = null) => {
   stream.pushStream({ ":path": filePath }, (err, pushStream) => {
-    send(pushStream, filePath);
+    send(pushStream, filePath, `push from ${from}`);
   });
 };
 
@@ -62,7 +62,7 @@ server.on("stream", async (stream, headers) => {
     let pushFiles = await findPushFiles(request);
     pushFiles = Array.from(new Set(pushFiles));
     pushFiles.forEach(pushFile => {
-      push(stream, pushFile);
+      push(stream, pushFile, request);
     });
     send(stream, request);
   } else {

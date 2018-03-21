@@ -10,6 +10,7 @@ const pushTypes = [".html", ".js", ".css"];
 const htmlLinkRegex = /<link[^>]+href="([^"]*)"[\s/]*[^>]*>/g;
 const htmlScriptRegex = /<script[^>]*src="([^"]*)"[^>]*>[\s]*<\/script>/g;
 const jsImportRegex = /import.*from[\s]+['"]([^'"]*)['"]/g;
+const jsImportNoFromRegex = /import[\s]+['"]([^'"]*)['"]/g;
 const jsWorkerRegex = /new\s+Worker\s*\(\s*['"]([^'"]*)['"]/g;
 const jsImportScriptsRegex = /importScripts\s*\(\s*['"]([^'"]*)['"]/g;
 const cssImportRegex = /url\("([^"]*)"\)/g;
@@ -26,7 +27,7 @@ const findPushFiles = async requestPath => {
   const filePath = path.join(__dirname, "public", requestPath);
   const ext = path.extname(filePath);
 
-  console.log("find", requestPath);
+  // console.log("find", requestPath);
 
   if (!pushTypes.includes(ext)) {
     return [];
@@ -44,6 +45,7 @@ const findPushFiles = async requestPath => {
 
   if (ext === ".js") {
     pushes.push(...gatherMatches(jsImportRegex, content));
+    pushes.push(...gatherMatches(jsImportNoFromRegex, content));
     // pushes.push(...gatherMatches(jsWorkerRegex, content));
     pushes.push(...gatherMatches(jsImportScriptsRegex, content));
   }

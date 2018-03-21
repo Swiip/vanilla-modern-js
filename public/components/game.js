@@ -1,8 +1,10 @@
-<link rel="import" href="grid.html">
-<link rel="import" href="tiles.html">
-<link rel="import" href="message.html">
+import "/components/grid.js";
+import "/components/tiles.js";
+import "/components/message.js";
 
-<template>
+import { store } from "/logic/connector.js";
+
+const template = `
   <div class="game-container">
     <swiip-grid></swiip-grid>
     <swiip-tiles></swiip-tiles>
@@ -20,11 +22,7 @@
     box-sizing: border-box;
   }
   </style>
-</template>
-
-<script type="module">
-import { attachTemplate } from "/render/components.js";
-import { store } from "/logic/connector.js";
+`;
 
 customElements.define(
   "swiip-game",
@@ -32,7 +30,8 @@ customElements.define(
     constructor() {
       super();
 
-      attachTemplate.call(this, "game.html");
+      this.attachShadow({ mode: "open" });
+      this.shadowRoot.innerHTML = template;
     }
 
     connectedCallback() {
@@ -62,4 +61,3 @@ customElements.define(
     }
   }
 );
-</script>

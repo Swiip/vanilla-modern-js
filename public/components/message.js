@@ -1,4 +1,8 @@
-<template>
+import { render } from "/render/render.js";
+
+import { store } from "/logic/connector.js";
+
+const template = `
   <root></root>
 
   <style>
@@ -26,13 +30,7 @@
       font-size: 50px;
     }
   </style>
-</template>
-
-<script type="module">
-import { attachTemplate } from "/render/components.js";
-import { render } from "/render/render.js";
-
-import { store } from "/logic/connector.js";
+`;
 
 customElements.define(
   "swiip-message",
@@ -40,7 +38,8 @@ customElements.define(
     constructor() {
       super();
 
-      attachTemplate.call(this, "message.html");
+      this.attachShadow({ mode: "open" });
+      this.shadowRoot.innerHTML = template;
 
       this.root = this.shadowRoot.querySelector("root");
     }
@@ -67,4 +66,3 @@ customElements.define(
     }
   }
 );
-</script>

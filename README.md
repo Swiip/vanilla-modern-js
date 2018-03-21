@@ -6,7 +6,7 @@
 
 1. Use of a maximum of modern API both Node side and browser side
 
-1. Anything is allowed as long as it's in a standard
+1. Anything is allowed as long as it's in a standard and it works on 2 different browser
 
 ## Currently using
 

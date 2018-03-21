@@ -1,4 +1,4 @@
-<template>
+const template = `
   <div class="above-game">
     <p class="game-intro">Join the numbers and get to the <strong>2048 tile!</strong></p>
     <a class="restart-button">New Game</a>
@@ -27,10 +27,7 @@
     align-items: center;
   }
   </style>
-</template>
-
-<script type="module">
-import { attachTemplate } from "/render/components.js";
+`;
 
 customElements.define(
   "swiip-above-game",
@@ -38,8 +35,8 @@ customElements.define(
     constructor() {
       super();
 
-      attachTemplate.call(this, "above-game.html");
+      this.attachShadow({ mode: "open" });
+      this.shadowRoot.innerHTML = template;
     }
   }
 );
-</script>

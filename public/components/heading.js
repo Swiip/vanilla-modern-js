@@ -1,4 +1,4 @@
-<template>
+const template = `
   <div class="heading">
     <h1 class="title">2048</h1>
     <div class="scores-container">
@@ -56,10 +56,7 @@
     content: "BEST";
   }
   </style>
-</template>
-
-<script type="module">
-import { attachTemplate } from "/render/components.js";
+`;
 
 customElements.define(
   "swiip-heading",
@@ -67,8 +64,8 @@ customElements.define(
     constructor() {
       super();
 
-      attachTemplate.call(this, "heading.html");
+      this.attachShadow({ mode: "open" });
+      this.shadowRoot.innerHTML = template;
     }
   }
 );
-</script>

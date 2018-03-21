@@ -1,4 +1,14 @@
-<template>
+import { range } from "/utils/utils.js";
+
+import { attachTemplate } from "/render/components.js";
+import { render } from "/render/render.js";
+
+import { store } from "/logic/connector.js";
+
+// im port { size } from "/game/conf.js";
+const size = 4;
+
+const template = `
   <root></root>
 
   <style>
@@ -97,18 +107,7 @@
      }
    }
   </style>
-</template>
-
-<script type="module">
-import { range } from "/utils/utils.js";
-
-import { attachTemplate } from "/render/components.js";
-import { render } from "/render/render.js";
-
-import { store } from "/logic/connector.js";
-
-// im port { size } from "/game/conf.js";
-const size = 4;
+`;
 
 customElements.define(
   "swiip-tiles",
@@ -116,7 +115,8 @@ customElements.define(
     constructor() {
       super();
 
-      attachTemplate.call(this, "tiles.html");
+      this.attachShadow({ mode: "open" });
+      this.shadowRoot.innerHTML = template;
 
       this.root = this.shadowRoot.querySelector("root");
     }
@@ -168,4 +168,3 @@ customElements.define(
     }
   }
 );
-</script>
