@@ -1,6 +1,5 @@
 import { range } from "/utils/utils.js";
 
-import { attachTemplate } from "/render/components.js";
 import { render } from "/render/render.js";
 
 import { store } from "/logic/connector.js";
