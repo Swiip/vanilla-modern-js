@@ -1,6 +1,6 @@
 import { range } from "/utils/utils.js";
 
-import { render } from "/render/render.js";
+import { render } from "/framework/render.js";
 
 import { store } from "/logic/connector.js";
 

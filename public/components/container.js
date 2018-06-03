@@ -1,24 +1,11 @@
-const template = `
-  <div class="container">
-    <slot></slot>
-  </div>
+import { component, withStyle } from "/framework/component.js";
 
-  <style>
-  .container {
-    width: 500px;
-    margin: 0 auto;
-  }
-  </style>
-`;
-
-customElements.define(
+component(
   "swiip-container",
-  class Container extends HTMLElement {
-    constructor() {
-      super();
-
-      this.attachShadow({ mode: "open" });
-      this.shadowRoot.innerHTML = template;
-    }
-  }
+  withStyle(
+    () => `
+      width: 500px;
+      margin: 0 auto;
+    `
+  )
 );

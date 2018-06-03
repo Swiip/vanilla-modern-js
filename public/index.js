@@ -11,7 +11,7 @@ store.dispatch({
   randomValue: Math.random()
 });
 
-navigator.serviceWorker
-  .register("/sw.js")
-  .then(() => console.log("CLIENT: service worker registration complete."))
-  .catch(() => console.log("CLIENT: service worker registration failure."));
+// navigator.serviceWorker
+//   .register("/sw.js")
+//   .then(() => console.log("CLIENT: service worker registration complete."))
+//   .catch(() => console.log("CLIENT: service worker registration failure."));
