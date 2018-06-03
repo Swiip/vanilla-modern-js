@@ -3,61 +3,58 @@ import "/components/tiles.js";
 import "/components/message.js";
 
 import { store } from "/logic/connector.js";
+import {
+  component,
+  withStyle,
+  withMarkup,
+  withHandler,
+  withConnected
+} from "/framework/component.js";
 
-const template = `
-  <div class="game-container">
-    <swiip-grid></swiip-grid>
-    <swiip-tiles></swiip-tiles>
-    <swiip-message></swiip-message>
-  </div>
+component(
+  "swiip-game-container",
+  withStyle(
+    () => `
+      margin-top: 40px;
+      position: relative;
+      background: var(--light-bg-brown);
+      border-radius: 6px;
+      width: 500px;
+      height: 500px;
+      box-sizing: border-box;
+    `
+  )
+);
 
-  <style>
-  .game-container {
-    margin-top: 40px;
-    position: relative;
-    background: var(--light-bg-brown);
-    border-radius: 6px;
-    width: 500px;
-    height: 500px;
-    box-sizing: border-box;
-  }
-  </style>
-`;
-
-customElements.define(
+component(
   "swiip-game",
-  class Game extends HTMLElement {
-    constructor() {
-      super();
-
-      this.attachShadow({ mode: "open" });
-      this.shadowRoot.innerHTML = template;
+  withHandler("keyHandler", () => event => {
+    const keyMapping = {
+      ArrowLeft: 0,
+      ArrowUp: 1,
+      ArrowRight: 2,
+      ArrowDown: 3
+    };
+    if (keyMapping[event.key] !== undefined) {
+      store.dispatch({
+        type: "MOVE",
+        direction: keyMapping[event.key],
+        randomPosition: Math.random(),
+        randomValue: Math.random()
+      });
+      event.preventDefault();
     }
-
-    connectedCallback() {
-      this.listenKeyboard();
-    }
-
-    listenKeyboard() {
-      window.addEventListener("keydown", event => this.keyHandler(event));
-    }
-
-    keyHandler(event) {
-      const keyMapping = {
-        ArrowLeft: 0,
-        ArrowUp: 1,
-        ArrowRight: 2,
-        ArrowDown: 3
-      };
-      if (keyMapping[event.key] !== undefined) {
-        store.dispatch({
-          type: "MOVE",
-          direction: keyMapping[event.key],
-          randomPosition: Math.random(),
-          randomValue: Math.random()
-        });
-        event.preventDefault();
-      }
-    }
-  }
+  }),
+  withConnected(({ keyHandler }) => {
+    window.addEventListener("keydown", event => keyHandler(event));
+  }),
+  withMarkup(
+    () => `
+    <swiip-game-container>
+      <swiip-grid></swiip-grid>
+      <swiip-tiles></swiip-tiles>
+      <swiip-message></swiip-message>
+    </swiip-game-container>
+  `
+  )
 );

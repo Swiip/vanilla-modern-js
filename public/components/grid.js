@@ -1,6 +1,6 @@
 import { range } from "/utils/utils.js";
 
-import { render } from "/render/render.js";
+import { render } from "/framework/render.js";
 
 // im port { size } from "/game/conf.js";
 const size = 4;
