@@ -15,13 +15,16 @@ component(
   "swiip-game-container",
   withStyle(
     () => `
-      margin-top: 40px;
-      position: relative;
-      background: var(--light-bg-brown);
-      border-radius: 6px;
-      width: 500px;
-      height: 500px;
-      box-sizing: border-box;
+      :host {
+        display: block;
+        margin-top: 40px;
+        position: relative;
+        background: var(--light-bg-brown);
+        border-radius: 6px;
+        width: 500px;
+        height: 500px;
+        box-sizing: border-box;
+      }
     `
   )
 );
