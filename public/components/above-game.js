@@ -2,7 +2,6 @@ import {
   component,
   withStyle,
   withMarkup,
-  withMarkup2,
   html
 } from "/framework/component.js";
 
@@ -48,7 +47,7 @@ const newGame = () => {
 
 component(
   "swiip-above-game",
-  withMarkup2(
+  withMarkup(
     () => html`
       <swiip-above-game-container>
         <p>Join the numbers and get to the <strong>2048 tile!</strong></p>

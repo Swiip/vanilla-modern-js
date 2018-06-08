@@ -1,12 +1,17 @@
-import { render } from "/framework/render.js";
+import {
+  component,
+  withProp,
+  withStore,
+  withStyle,
+  withMarkup,
+  html
+} from "/framework/component.js";
 
-import { store } from "/logic/connector.js";
-
-const template = `
-  <root></root>
-
-  <style>
-    .game-message {
+component(
+  "swiip-message-container",
+  withProp("show"),
+  withStyle(({ show }) => `
+    :host {
       position: absolute;
       top: 0;
       bottom: 0;
@@ -20,49 +25,20 @@ const template = `
       align-items: center;
       opacity: 0;
       transition: opacity .3s ease;
+      opacity: ${show ? 1 : 0};
     }
+  `)
+);
 
-    .game-message.show {
-      opacity: 1;
-    }
-
-    h2 {
-      font-size: 50px;
-    }
-  </style>
-`;
-
-customElements.define(
+component(
   "swiip-message",
-  class Message extends HTMLElement {
-    constructor() {
-      super();
-
-      this.attachShadow({ mode: "open" });
-      this.shadowRoot.innerHTML = template;
-
-      this.root = this.shadowRoot.querySelector("root");
-    }
-
-    connectedCallback() {
-      store.subscribe(() => this.update());
-      this.update();
-    }
-
-    update() {
-      const { won, lost } = store.getState();
-
-      render(
-        this.root,
-        `
-        <div class="game-message ${won || lost ? "show" : ""}">
-          <h2>
-            ${won ? "You Win!" : ""}
-            ${lost ? "Game Over" : ""}
-          </h2>
-        </div>
-        `
-      );
-    }
-  }
+  withStore(({ won, lost }) => ({ won, lost })),
+  withMarkup(({ won, lost }) => html`
+    <swiip-message-container show=${ won || lost }>
+      <h2>
+        ${won ? "You Win!" : ""}
+        ${lost ? "Game Over" : ""}
+      </h2>
+    </div>
+  `)
 );

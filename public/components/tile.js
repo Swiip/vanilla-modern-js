@@ -1,6 +1,6 @@
 import { component, withProp, withStyle } from "/framework/component.js";
 
-const tileColors = [
+const tileParams = [
   null,
   {
     color: "inherit",
@@ -59,13 +59,12 @@ const tileColors = [
   }
 ];
 
+const param = tile => tileParams[Math.log2(tile.value)];
+
 component(
   "swiip-tile",
-  withProp("row"),
-  withProp("col"),
-  withProp("merged"),
-  withProp("value"),
-  withStyle(({ row, col, value, merged }) => value && `
+  withProp("tile"),
+  withStyle(({ tile }) => tile && `
     :host {
       position: absolute;
       height: 100px;
@@ -81,12 +80,12 @@ component(
       transition: all .3s ease;
       animation: .3s appear;
 
-      top: ${20 + 120 * row}px;
-      left: ${20 + 120 * col}px;
-      color: ${tileColors[Math.log2(value)].color};
-      background-color: ${tileColors[Math.log2(value)].background};
-      font-size: ${tileColors[Math.log2(value)].font};
-      z-index: ${merged ? 9 : 10};
+      top: ${20 + 120 * tile.row}px;
+      left: ${20 + 120 * tile.column}px;
+      color: ${param(tile).color};
+      background-color: ${param(tile).background};
+      font-size: ${param(tile).font};
+      z-index: ${tile.merged ? 9 : 10};
     }
 
     @keyframes appear {

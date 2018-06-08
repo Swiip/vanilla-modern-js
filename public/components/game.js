@@ -6,7 +6,7 @@ import { store } from "/logic/connector.js";
 import {
   component,
   withStyle,
-  withMarkup2,
+  withMarkup,
   withHandler,
   withConnected,
   html
@@ -52,7 +52,7 @@ component(
   withConnected(({ keyHandler }) => {
     window.addEventListener("keydown", event => keyHandler(event));
   }),
-  withMarkup2(() => html`
+  withMarkup(() => html`
     <swiip-game-container>
       <swiip-grid></swiip-grid>
       <swiip-tiles></swiip-tiles>

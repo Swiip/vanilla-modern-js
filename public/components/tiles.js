@@ -1,7 +1,7 @@
 import {
   component,
   withProp,
-  withMarkup2,
+  withMarkup,
   withHandler,
   withConnected,
   withStore,
@@ -32,16 +32,10 @@ component(
 
     return { tiles };
   }),
-  withMarkup2(({ tiles = [] }) => html`
+  withMarkup(({ tiles = [] }) => html`
     <div>
       ${tiles.map(tile => html`
-        <swiip-tile
-          key="${tile.id}"
-          row="${tile.row}"
-          col="${tile.column}"
-          merged="${tile.merged}"
-          value="${tile.value}"
-        >
+        <swiip-tile key=${tile.id} tile=${tile}>
           ${tile.value}
         </swiip-tile>
       `)}
