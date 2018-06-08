@@ -2,13 +2,14 @@ import {
   component,
   withStyle,
   withMarkup,
-  html
+  html,
+  css
 } from "/framework/component.js";
 
 component(
   "swiip-above-game-container",
   withStyle(
-    () => `
+    () => css`
       :host {
         display: flex;
         flex-direction: row;
@@ -22,7 +23,7 @@ component(
 component(
   "swiip-restart-button",
   withStyle(
-    () => `
+    () => css`
       :host {
         color: var(--light-text-white);
         background-color: var(--heavy-bg-brown);

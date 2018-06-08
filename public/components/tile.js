@@ -1,4 +1,4 @@
-import { component, withProp, withStyle } from "/framework/component.js";
+import { component, withProp, withStyle, css } from "/framework/component.js";
 
 const tileParams = [
   null,
@@ -64,7 +64,7 @@ const param = tile => tileParams[Math.log2(tile.value)];
 component(
   "swiip-tile",
   withProp("tile"),
-  withStyle(({ tile }) => tile && `
+  withStyle(({ tile }) => tile && css`
     :host {
       position: absolute;
       height: 100px;

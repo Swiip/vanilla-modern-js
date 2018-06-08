@@ -2,7 +2,7 @@ import { compose } from "/utils/utils.js";
 import { render } from "/framework/render.js";
 import { store } from "/logic/connector.js";
 
-export { html } from "/framework/render.js";
+export { html, css } from "/framework/parser.js";
 
 export const component = (name, ...enhancers) => {
   const customElement = class extends HTMLElement {

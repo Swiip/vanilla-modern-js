@@ -9,13 +9,14 @@ import {
   withMarkup,
   withHandler,
   withConnected,
-  html
+  html,
+  css
 } from "/framework/component.js";
 
 component(
   "swiip-game-container",
   withStyle(
-    () => `
+    () => css`
       :host {
         display: block;
         margin-top: 40px;
