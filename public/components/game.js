@@ -6,9 +6,10 @@ import { store } from "/logic/connector.js";
 import {
   component,
   withStyle,
-  withMarkup,
+  withMarkup2,
   withHandler,
-  withConnected
+  withConnected,
+  html
 } from "/framework/component.js";
 
 component(
@@ -51,13 +52,11 @@ component(
   withConnected(({ keyHandler }) => {
     window.addEventListener("keydown", event => keyHandler(event));
   }),
-  withMarkup(
-    () => `
+  withMarkup2(() => html`
     <swiip-game-container>
       <swiip-grid></swiip-grid>
       <swiip-tiles></swiip-tiles>
       <swiip-message></swiip-message>
     </swiip-game-container>
-  `
-  )
+  `)
 );
