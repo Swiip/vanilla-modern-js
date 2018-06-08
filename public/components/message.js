@@ -4,13 +4,14 @@ import {
   withStore,
   withStyle,
   withMarkup,
-  html
+  html,
+  css
 } from "/framework/component.js";
 
 component(
   "swiip-message-container",
   withProp("show"),
-  withStyle(({ show }) => `
+  withStyle(({ show }) => css`
     :host {
       position: absolute;
       top: 0;

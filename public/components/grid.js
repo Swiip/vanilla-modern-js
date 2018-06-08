@@ -5,7 +5,8 @@ import {
   withStyle,
   withMarkup,
   withProp,
-  html
+  html,
+  css
 } from "/framework/component.js";
 
 // im port { size } from "/game/conf.js";
@@ -13,7 +14,7 @@ const size = 4;
 
 component(
   "swiip-grid-container",
-  withStyle(() => `
+  withStyle(() => css`
     :host {
       position: absolute;
       top: 0;
@@ -35,7 +36,7 @@ component(
   "swiip-grid-cell",
   withProp("x"),
   withProp("y"),
-  withStyle(({ x, y }) => `
+  withStyle(({ x, y }) => css`
     :host {
       position: absolute;
       height: 100px;

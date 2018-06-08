@@ -3,12 +3,13 @@ import {
   withProp,
   withStyle,
   withMarkup,
-  html
+  html,
+  css
 } from "/framework/component.js";
 
 component(
   "swiip-heading-container",
-  withStyle(() => `
+  withStyle(() => css`
     :host {
       display: flex;
       flex-direction: row;
@@ -19,7 +20,7 @@ component(
 
 component(
   "swiip-heading-title",
-  withStyle(() => `
+  withStyle(() => css`
     :host {
       font-size: 80px;
       font-weight: bold;
@@ -41,7 +42,7 @@ component(
 component(
   "swiip-score",
   withProp("label"),
-  withStyle(({ label }) => `
+  withStyle(({ label }) => css`
     :host {
       background-color: var(--light-bg-brown);
       color: white;
