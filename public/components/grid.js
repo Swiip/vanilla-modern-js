@@ -3,7 +3,7 @@ import { render } from "/framework/render.js";
 import {
   component,
   withStyle,
-  withMarkup2,
+  withMarkup,
   withProp,
   html
 } from "/framework/component.js";
@@ -49,7 +49,7 @@ component(
 
 component(
   "swiip-grid",
-  withMarkup2(() => html`
+  withMarkup(() => html`
     <swiip-grid-container>
       ${range(size).map(x =>
           range(size).map(y => html`

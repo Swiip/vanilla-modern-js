@@ -1,7 +1,5 @@
 import { forEach, find, flatten } from "/utils/utils.js";
 
-const domParser = new DOMParser();
-
 function updateAttr(target, name, newAttr, oldAttr) {
   if (!newAttr) {
     target.removeAttribute(name);
@@ -108,18 +106,6 @@ function updateElement(parent, newNode, oldNode) {
   }
 }
 
-// Thanks to : http://2ality.com/2014/07/jsx-template-strings.html
-function parse(htmlString) {
-  const doc = domParser.parseFromString(htmlString, "text/html");
-
-  // DomParser with text/html recreates html / body each times
-  return doc.querySelector("body > *");
-}
-
-export function render(parent, htmlString) {
-  updateElement(parent, parse(htmlString), parent.childNodes[0]);
-}
-
 // Parser V2
 
 const paramRegex = /__(\d)+/;
@@ -143,6 +129,9 @@ const replaceAnchors = (parent, params) => {
           }
           childNode.__[attr.name] = params[parseInt(match[1])];
           childNode.setAttribute(attr.name, params[parseInt(match[1])]);
+          if (attr.name.startsWith("on")) {
+            childNode[attr.name] = params[parseInt(match[1])];
+          }
         }
       })
     }
@@ -179,7 +168,7 @@ export function html(parts, ...params) {
   return domWithAnchors.childNodes[0];
 }
 
-export function render2(parent, html) {
+export function render(parent, html) {
   // console.log('render2', parent, html, parent.childNodes[0]);
   updateElement(parent, html, parent.childNodes[0]);
 }

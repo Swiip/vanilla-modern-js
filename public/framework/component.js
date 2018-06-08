@@ -1,5 +1,5 @@
 import { compose } from "/utils/utils.js";
-import { render, render2 } from "/framework/render.js";
+import { render } from "/framework/render.js";
 import { store } from "/logic/connector.js";
 
 export { html } from "/framework/render.js";
@@ -31,29 +31,16 @@ export const withProp = name => Base =>
     }
   };
 
-export const withMarkup = handler => Base =>
-  class extends Base {
-    connectedCallback() {
-      super.connectedCallback();
-      this.attachShadow({ mode: "open" });
-      render(this.shadowRoot, handler(this));
-    }
-    update() {
-      super.update();
-      render(this.shadowRoot, handler(this));
-    }
-  };
-
-  export const withMarkup2 = handler => Base =>
+  export const withMarkup = handler => Base =>
     class extends Base {
       connectedCallback() {
         super.connectedCallback();
         this.attachShadow({ mode: "open" });
-        render2(this.shadowRoot, handler(this));
+        render(this.shadowRoot, handler(this));
       }
       update() {
         super.update();
-        render2(this.shadowRoot, handler(this));
+        render(this.shadowRoot, handler(this));
       }
     };
 
