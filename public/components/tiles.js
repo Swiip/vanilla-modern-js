@@ -1,10 +1,11 @@
 import {
   component,
   withProp,
-  withMarkup,
+  withMarkup2,
   withHandler,
   withConnected,
-  withStore
+  withStore,
+  html
 } from "/framework/component.js";
 
 import "/components/tile.js";
@@ -31,25 +32,19 @@ component(
 
     return { tiles };
   }),
-  withMarkup(
-    ({ tiles = [] }) => `
-      <div>
-        ${tiles
-          .map(
-            tile => `
-              <swiip-tile
-                key="${tile.id}"
-                row="${tile.row}"
-                col="${tile.column}"
-                merged="${tile.merged}"
-                value="${tile.value}"
-              >
-                ${tile.value}
-              </swiip-tile>
-            `
-          )
-          .join("")}
-      </div>
-    `
-  )
+  withMarkup2(({ tiles = [] }) => html`
+    <div>
+      ${tiles.map(tile => html`
+        <swiip-tile
+          key="${tile.id}"
+          row="${tile.row}"
+          col="${tile.column}"
+          merged="${tile.merged}"
+          value="${tile.value}"
+        >
+          ${tile.value}
+        </swiip-tile>
+      `)}
+    </div>
+  `)
 );

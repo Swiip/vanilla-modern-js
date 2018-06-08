@@ -65,47 +65,45 @@ component(
   withProp("col"),
   withProp("merged"),
   withProp("value"),
-  withStyle(
-    ({ row, col, value, merged }) => `
-      :host {
-        position: absolute;
+  withStyle(({ row, col, value, merged }) => value && `
+    :host {
+      position: absolute;
+      height: 100px;
+      width: 100px;
+      border-radius: 3px;
+      z-index: 10;
+      font-weight: bold;
+      font-size: 55px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      transition: all .3s ease;
+      animation: .3s appear;
+
+      top: ${20 + 120 * row}px;
+      left: ${20 + 120 * col}px;
+      color: ${tileColors[Math.log2(value)].color};
+      background-color: ${tileColors[Math.log2(value)].background};
+      font-size: ${tileColors[Math.log2(value)].font};
+      z-index: ${merged ? 9 : 10};
+    }
+
+    @keyframes appear {
+      from {
+        height: 0;
+        width: 0;
+        opacity: 0;
+        margin-top: 50px;
+        margin-left: 50px;
+      }
+      to {
         height: 100px;
         width: 100px;
-        border-radius: 3px;
-        z-index: 10;
-        font-weight: bold;
-        font-size: 55px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        transition: all .3s ease;
-        animation: .3s appear;
-
-        top: ${20 + 120 * row}px;
-        left: ${20 + 120 * col}px;
-        color: ${tileColors[Math.log2(value)].color};
-        background-color: ${tileColors[Math.log2(value)].background};
-        font-size: ${tileColors[Math.log2(value)].font};
-        z-index: ${merged === "true" ? 9 : 10};
+        opacity: 1;
+        margin-top: 0;
+        margin-left: 0;
       }
-
-      @keyframes appear {
-        from {
-          height: 0;
-          width: 0;
-          opacity: 0;
-          margin-top: 50px;
-          margin-left: 50px;
-        }
-        to {
-          height: 100px;
-          width: 100px;
-          opacity: 1;
-          margin-top: 0;
-          margin-left: 0;
-        }
-      }
-    `
-  )
+    }
+  `)
 );

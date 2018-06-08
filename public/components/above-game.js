@@ -1,4 +1,10 @@
-import { component, withStyle, withMarkup } from "/framework/component.js";
+import {
+  component,
+  withStyle,
+  withMarkup,
+  withMarkup2,
+  html
+} from "/framework/component.js";
 
 component(
   "swiip-above-game-container",
@@ -36,13 +42,17 @@ component(
   )
 );
 
+const newGame = () => {
+  console.log("New Game!");
+};
+
 component(
   "swiip-above-game",
-  withMarkup(
-    () => `
+  withMarkup2(
+    () => html`
       <swiip-above-game-container>
         <p>Join the numbers and get to the <strong>2048 tile!</strong></p>
-        <swiip-restart-button>New Game</swiip-restart-button>
+        <swiip-restart-button onclick=${newGame}>New Game</swiip-restart-button>
       </swiip-above-game-container>
     `
   )

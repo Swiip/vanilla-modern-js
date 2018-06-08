@@ -1,9 +1,17 @@
 import { compose } from "/utils/utils.js";
-import { render } from "/framework/render.js";
+import { render, render2 } from "/framework/render.js";
 import { store } from "/logic/connector.js";
+
+export { html } from "/framework/render.js";
 
 export const component = (name, ...enhancers) => {
   const customElement = class extends HTMLElement {
+    constructor() {
+      super();
+      if (!this.__) {
+        this.__ = {}
+      }
+    }
     connectedCallback() {}
     attributeChangedCallback() {}
     update() {}
@@ -13,15 +21,13 @@ export const component = (name, ...enhancers) => {
 
 export const withProp = name => Base =>
   class extends Base {
-    static get observedAttributes() {
-      return [...(super.observedAttributes || []), name];
+    set [name](value) {
+      this.__[name] = value;
+      this.setAttribute(name, value);
+      this.update();
     }
-    attributeChangedCallback(attributeName, oldValue, newValue) {
-      super.attributeChangedCallback(attributeName, oldValue, newValue);
-      if (attributeName === name) {
-        this[name] = newValue;
-        this.update();
-      }
+    get [name]() {
+      return this.__[name];
     }
   };
 
@@ -38,18 +44,25 @@ export const withMarkup = handler => Base =>
     }
   };
 
-export const withStyle = handler => Base => {
-  let styleNode;
+  export const withMarkup2 = handler => Base =>
+    class extends Base {
+      connectedCallback() {
+        super.connectedCallback();
+        this.attachShadow({ mode: "open" });
+        render2(this.shadowRoot, handler(this));
+      }
+      update() {
+        super.update();
+        render2(this.shadowRoot, handler(this));
+      }
+    };
 
+export const withStyle = handler => Base => {
   const createStyle = component => {
-    const node = document.createElement("style");
-    node.appendChild(
-      document.createTextNode(`
-        :host { display: block }
-        ${handler(component)}
-      `)
-    );
-    return node;
+    return document.createTextNode(`
+      :host { display: block }
+      ${handler(component)}
+    `);
   };
 
   return class extends Base {
@@ -57,19 +70,14 @@ export const withStyle = handler => Base => {
       super.connectedCallback();
       this.attachShadow({ mode: "open" });
       this.shadowRoot.innerHTML = "<slot></slot>";
-      styleNode = createStyle(this);
+      const styleNode = document.createElement("style");
+      styleNode.appendChild(createStyle(this));
       this.shadowRoot.appendChild(styleNode);
     }
     update() {
-      if (styleNode && this.shadowRoot) {
-        const oldNode = styleNode;
-        styleNode = createStyle(this);
-        if (styleNode.isConnected) {
-          this.shadowRoot.replaceChild(styleNode, oldNode);
-        } else {
-          this.shadowRoot.appendChild(styleNode);
-        }
-      }
+      const styleNode = this.shadowRoot.querySelector("style");
+      styleNode.childNodes[0].remove();
+      styleNode.appendChild(createStyle(this));
     }
   };
 };
