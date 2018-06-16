@@ -89,7 +89,7 @@ export const withStore = handler => Base =>
     connectedCallback() {
       super.connectedCallback();
       const storeUpdateHandler = () => {
-        Object.assign(this, handler(store.getState(), this));
+        Object.assign(this, handler(store, this));
         this.update();
       };
       store.subscribe(storeUpdateHandler);

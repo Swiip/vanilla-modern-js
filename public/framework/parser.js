@@ -28,6 +28,7 @@ const replaceAnchors = (parent, params) => {
       })
     }
     if (childNode.nodeValue) {
+      // console.log('coucou', childNode.nodeValue, childNode.nodeValue.trim().match(paramRegex));
       const match = childNode.nodeValue.trim().match(paramRegex);
       if (match) {
         const param = params[parseInt(match[1])];
@@ -38,6 +39,9 @@ const replaceAnchors = (parent, params) => {
           children.forEach(child => parent.appendChild(child));
         } else {
           childNode.nodeValue = param;
+          // match.forEach(singleMatch => {
+          //   childNode.nodeValue.replace(singleMatch, param);
+          // })
         }
       }
     } else {
