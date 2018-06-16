@@ -1,6 +1,9 @@
 // Sadly { type: "module" } does not work yet :
 // https://stackoverflow.com/questions/44118600/web-workers-how-to-import-modules
 // const worker = new Worker("/logic/store.js", { type: "module" });
+// New Chrome 67 works!
+// Firefox still not :(
+
 const worker = new Worker("/logic/store.js");
 
 const storeConnector = worker => {

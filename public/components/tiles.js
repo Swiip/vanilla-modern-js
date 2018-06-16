@@ -12,7 +12,8 @@ import "/components/tile.js";
 
 component(
   "swiip-tiles",
-  withStore(({ board }) => {
+  withStore(({ getState }) => {
+    const { board } = getState();
     const tiles = [];
 
     if (!board) {

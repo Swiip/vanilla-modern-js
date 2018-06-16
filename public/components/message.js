@@ -33,12 +33,15 @@ component(
 
 component(
   "swiip-message",
-  withStore(({ won, lost }) => ({ won, lost })),
+  withStore(({ getState }) => {
+    const { won, lost } = getState();
+    return { won, lost };
+  }),
   withMarkup(({ won, lost }) => html`
     <swiip-message-container show=${ won || lost }>
       <h2>
-        ${won ? "You Win!" : ""}
-        ${lost ? "Game Over" : ""}
+        <span>${won ? "You Win!" : ""}</span>
+        <span>${lost ? "Game Over" : ""}</span>
       </h2>
     </div>
   `)
