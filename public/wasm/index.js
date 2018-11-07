@@ -2,6 +2,15 @@
 
 importScripts("/wasm/wrap.js");
 
+const init = async () => {
+  const { instance } = await WebAssembly.instantiateStreaming(
+    fetch("/rust/debug/2048.wasm"),
+    {}
+  );
+  console.log("WebAssembly instantiate success", instance, instance.exports);
+  return instance;
+};
+
 const run = async () => {
   try {
     const { instance } = await WebAssembly.instantiateStreaming(
@@ -31,4 +40,4 @@ const run = async () => {
   }
 };
 
-run();
+// run();

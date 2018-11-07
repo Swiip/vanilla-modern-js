@@ -2,9 +2,10 @@ import "/components/grid.js";
 import "/components/tiles.js";
 import "/components/message.js";
 
-import { store } from "/logic/connector.js";
+// import { store } from "/logic/connector.js";
 import {
   component,
+  withStore,
   withStyle,
   withMarkup,
   withHandler,
@@ -33,7 +34,8 @@ component(
 
 component(
   "swiip-game",
-  withHandler("keyHandler", () => event => {
+  withStore(store => ({ store })),
+  withHandler("keyHandler", ({ store }) => event => {
     const keyMapping = {
       ArrowLeft: 0,
       ArrowUp: 1,
@@ -42,10 +44,10 @@ component(
     };
     if (keyMapping[event.key] !== undefined) {
       store.dispatch({
-        type: "MOVE",
+        action_type: "Move",
         direction: keyMapping[event.key],
-        randomPosition: Math.random(),
-        randomValue: Math.random()
+        random_position: Math.random(),
+        random_value: Math.random()
       });
       event.preventDefault();
     }
@@ -53,11 +55,13 @@ component(
   withConnected(({ keyHandler }) => {
     window.addEventListener("keydown", event => keyHandler(event));
   }),
-  withMarkup(() => html`
-    <swiip-game-container>
-      <swiip-grid></swiip-grid>
-      <swiip-tiles></swiip-tiles>
-      <swiip-message></swiip-message>
-    </swiip-game-container>
-  `)
+  withMarkup(
+    () => html`
+      <swiip-game-container>
+        <swiip-grid></swiip-grid>
+        <swiip-tiles></swiip-tiles>
+        <swiip-message></swiip-message>
+      </swiip-game-container>
+    `
+  )
 );

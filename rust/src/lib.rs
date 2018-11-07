@@ -60,16 +60,6 @@ pub extern "C" fn dealloc_str(ptr: *mut c_char) {
         CString::new(result)
             .expect("Converting result to CString failed")
             .into_raw()
-
-        // let data = CStr::from_ptr(data);
-        // let mut data = data.to_str().unwrap().to_owned();
-        // data.push_str("Hello");
-        // CString::new(data.into_bytes()).unwrap().into_raw()
-
-        // m.update(data.to_bytes());
-        // let dgst = m.digest().to_string();
-        // let s = CString::new(dgst).unwrap();
-        // s.into_raw()
     }
 }
 
@@ -82,7 +72,7 @@ mod tests {
         unsafe {
             let args = "{
                 \"state\":{\"board\":{\"current_id\":0,\"grid\":[]},\"changed\":false,\"won\":false,\"lost\":false},
-                \"action\":{\"action_type\":\"Init\",\"direction\":null,\"random_value\":null,\"random_position\":null}
+                \"action\":{\"action_type\":\"Init\",\"direction\":null,\"random_value\":0.22,\"random_position\":0.33}
             }";
             let args_ptr = CString::new(args).unwrap().into_raw();
             let result_ptr = reducer(args_ptr);

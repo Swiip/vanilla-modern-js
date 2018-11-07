@@ -4,19 +4,30 @@
 // New Chrome 67 works!
 // Firefox still not :(
 
-const worker = new Worker("/logic/store.js");
+import { store } from "/compo/src/store.js";
 
-const storeConnector = worker => {
-  let state = {};
-  const subscribers = [];
-  const getState = () => state;
-  const subscribe = listener => subscribers.push(listener);
+export const init = () =>
+  new Promise(resolve => {
+    const worker = new Worker("/logic/store.js");
+
+    worker.onmessage = message => {
+      console.log("init message", message);
+      if (message.data === "READY") {
+        start(worker);
+        resolve(store);
+      }
+    };
+  });
+
+let state = {};
+const subscribers = [];
+store.getState = () => state;
+store.subscribe = listener => subscribers.push(listener);
+
+const start = worker => {
   worker.onmessage = message => {
     state = message.data;
     subscribers.forEach(subscriber => subscriber());
   };
-  const dispatch = action => worker.postMessage(action);
-  return { getState, subscribe, dispatch };
+  store.dispatch = action => worker.postMessage(action);
 };
-
-export const store = storeConnector(worker);
