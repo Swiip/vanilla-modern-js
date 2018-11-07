@@ -1,5 +1,4 @@
 import { range } from "/utils/utils.js";
-import { render } from "/framework/render.js";
 import {
   component,
   withStyle,
@@ -7,7 +6,7 @@ import {
   withProp,
   html,
   css
-} from "/framework/component.js";
+} from "/compo/index.js";
 
 // im port { size } from "/game/conf.js";
 const size = 4;

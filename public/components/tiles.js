@@ -6,7 +6,7 @@ import {
   withConnected,
   withStore,
   html
-} from "/framework/component.js";
+} from "/compo/index.js";
 
 import "/components/tile.js";
 

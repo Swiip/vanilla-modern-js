@@ -21,3 +21,7 @@ onmessage = ({ data }) => {
   console.log("dispatched", data, state);
   postMessage(state);
 };
+
+console.log("WebAssembly from worker", WebAssembly);
+
+importScripts("/wasm/index.js");

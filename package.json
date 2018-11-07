@@ -4,8 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node .",
+    "build-rust": "cd rust && cargo build --target wasm32-unknown-unknown"
   },
   "author": "Matthieu Lux",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "compo": "^0.3.0"
+  }
 }

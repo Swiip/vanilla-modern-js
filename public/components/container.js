@@ -1,4 +1,4 @@
-import { component, withStyle, css } from "/framework/component.js";
+import { component, withStyle, css } from "/compo/index.js";
 
 component(
   "swiip-container",

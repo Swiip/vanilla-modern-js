@@ -1,4 +1,4 @@
-import { component, withProp, withStyle, css } from "/framework/component.js";
+import { component, withProp, withStyle, css } from "/compo/index.js";
 
 const tileParams = [
   null,

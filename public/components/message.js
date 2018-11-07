@@ -6,7 +6,7 @@ import {
   withMarkup,
   html,
   css
-} from "/framework/component.js";
+} from "/compo/index.js";
 
 component(
   "swiip-message-container",

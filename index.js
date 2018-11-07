@@ -8,19 +8,22 @@ const stat = util.promisify(fs.stat);
 const exists = util.promisify(fs.exists);
 const readFile = util.promisify(fs.readFile);
 
-const { findPushFiles } = require("./discover");
+const { findPushFiles, getFilePath } = require("./discover");
 
 const extTypeMap = {
   ".html": "text/html",
   ".js": "application/javascript",
-  ".css": "text/css"
+  ".css": "text/css",
+  ".wasm": "application/wasm"
 };
 
 const acceptedRequests = {
   "/": "/index.html",
   "/index.html": "/index.html",
   "/logic/store.js": "/logic/store.js",
-  "/sw.js": "/sw.js"
+  "/sw.js": "/sw.js",
+  "/rust/debug/2048.wasm": "/rust/debug/2048.wasm",
+  "/rust/release/2048.wasm": "/rust/release/2048.wasm"
 };
 
 const server = http2.createSecureServer({
@@ -43,8 +46,6 @@ const send = async (stream, requestPath, log = "send") => {
     "last-modified": statData.mtime.toUTCString(),
     "content-type": `${extTypeMap[ext]}; charset=utf-8`
   };
-
-  console.log(log, requestPath);
 
   stream.respondWithFD(fd, headers);
 };

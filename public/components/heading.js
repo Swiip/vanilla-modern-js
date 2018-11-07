@@ -5,7 +5,7 @@ import {
   withMarkup,
   html,
   css
-} from "/framework/component.js";
+} from "/compo/index.js";
 
 component(
   "swiip-heading-container",
