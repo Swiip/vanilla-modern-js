@@ -51,6 +51,7 @@ const send = async (stream, requestPath, log = "send") => {
 
 const push = (stream, filePath, from = null) => {
   stream.pushStream({ ":path": filePath }, (err, pushStream) => {
+    pushStream.on("error", error => console.log(error));
     send(pushStream, filePath, `push from ${from}`);
   });
 };
