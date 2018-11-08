@@ -3,7 +3,7 @@ use super::FOOR_PROBABILITY;
 use board::Board;
 use tile::Tile;
 
-fn update_tiles(board: &mut Board) {
+pub fn update_tiles(board: &mut Board) {
     board.grid
         .iter_mut()
         .enumerate()

@@ -18,7 +18,7 @@ fn times<F>(times: usize, mut f: F) where F: FnMut() {
 }
 
 // 0 -> left, 1 -> up, 2 -> right, 3 -> down
-fn move_action(board: &mut Board, direction: usize) -> bool {
+pub fn move_action(board: &mut Board, direction: usize) -> bool {
     times(direction, || {
         rotate_left(board);
     });

@@ -52,13 +52,15 @@ const send = async (stream, requestPath, log = "send") => {
 
 const push = (stream, filePath, from = null) => {
   stream.pushStream({ ":path": filePath }, (err, pushStream) => {
-    pushStream.on("error", error => console.log(error));
+    pushStream.on("error", error => console.error("Push stream error", error));
     send(pushStream, filePath, `push from ${from}`);
   });
 };
 
 server.on("stream", async (stream, headers) => {
   console.log("request", headers[":path"]);
+
+  stream.on("error", error => console.error("Stream error", error));
 
   if (Object.keys(acceptedRequests).includes(headers[":path"])) {
     const request = acceptedRequests[headers[":path"]];
@@ -73,5 +75,7 @@ server.on("stream", async (stream, headers) => {
     stream.end();
   }
 });
+
+server.on("error", error => console.error("Server error", error));
 
 server.listen(8443);

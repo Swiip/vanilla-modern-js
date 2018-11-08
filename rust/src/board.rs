@@ -25,9 +25,18 @@ impl Board {
         }
     }
 
-    pub fn get_new_id(&mut self) -> usize {
-        self.current_id += 1;
-        self.current_id
+    // pub fn get_new_id(&mut self) -> usize {
+    //     self.current_id += 1;
+    //     self.current_id
+    // }
+}
+
+impl Clone for Board {
+    fn clone(&self) -> Board {
+        Board {
+            current_id: self.current_id,
+            grid: self.grid.clone()
+        }
     }
 }
 
@@ -37,7 +46,7 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let board = Board::new();
+        Board::new();
 
         // println!("Board {:?}", board);
     }

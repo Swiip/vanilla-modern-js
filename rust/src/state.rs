@@ -1,4 +1,7 @@
 use board::Board;
+use add::choose_random_tile;
+use add::update_tiles;
+use move_tile::move_action;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ReducerArguments {
@@ -25,6 +28,17 @@ impl State {
     }
 }
 
+impl Clone for State {
+    fn clone(&self) -> State {
+        State {
+            board: self.board.clone(),
+            changed: self.changed,
+            won: self.won,
+            lost: self.lost
+        }
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub enum ActionType {
     Init,
@@ -39,17 +53,20 @@ pub struct Action {
     pub random_position: Option<f32>,
 }
 
-impl Action {
-    pub fn from_json(data: String) -> Action {
-        Action {
-            action_type: ActionType::Init,
-            direction: None,
-            random_value: None,
-            random_position: None
+pub fn reducer(state: State, action: Action) -> State {
+    match action.action_type {
+        ActionType::Init => {
+            let mut mew_state = State::new();
+            choose_random_tile(&mut mew_state.board, action.random_position.unwrap(), action.random_value.unwrap());
+            update_tiles(&mut mew_state.board);
+            mew_state
+        }
+        ActionType::Move => {
+            let mut mew_state = state.clone();
+            move_action(&mut mew_state.board, action.direction.unwrap());
+            choose_random_tile(&mut mew_state.board, action.random_position.unwrap(), action.random_value.unwrap());
+            update_tiles(&mut mew_state.board);
+            mew_state
         }
     }
-}
-
-pub fn reducer(state: State, action: Action) -> State {
-    State::new()
 }

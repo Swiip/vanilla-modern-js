@@ -55,7 +55,7 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let tile = Tile::new(42);
+        Tile::new(42);
 
         // println!("Tile {:?}", tile);
     }

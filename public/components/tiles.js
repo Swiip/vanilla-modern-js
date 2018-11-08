@@ -20,7 +20,7 @@ component(
       return tiles;
     }
 
-    board.forEach(rows => {
+    board.grid.forEach(rows => {
       rows.forEach(cell => {
         if (cell.value > 0) {
           tiles.push(cell);
@@ -33,13 +33,17 @@ component(
 
     return { tiles };
   }),
-  withMarkup(({ tiles = [] }) => html`
+  withMarkup(
+    ({ tiles = [] }) => html`
     <div>
-      ${tiles.map(tile => html`
+      ${tiles.map(
+        tile => html`
         <swiip-tile key=${tile.id} tile=${tile}>
           ${tile.value}
         </swiip-tile>
-      `)}
+      `
+      )}
     </div>
-  `)
+  `
+  )
 );
