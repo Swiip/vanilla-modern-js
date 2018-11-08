@@ -8,16 +8,24 @@ use std::mem;
 use std::ffi::{CString, CStr};
 use std::os::raw::{c_char, c_void};
 
+mod utils;
 mod tile;
 mod board;
-mod add;
-mod move_tile;
 mod state;
+mod action;
+mod reducer;
 
-use state::ReducerArguments;
+use state::State;
+use action::Action;
 
 const DIMENSION: usize = 4;
 const FOOR_PROBABILITY: f32 = 0.2;
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ReducerArguments {
+    pub state: State,
+    pub action: Action
+}
 
 #[no_mangle]
 pub extern "C" fn alloc(size: usize) -> *mut c_void {
@@ -52,7 +60,7 @@ pub extern "C" fn dealloc_str(ptr: *mut c_char) {
         let args: ReducerArguments = serde_json::from_str(&args_in_json)
             .expect("Reducer String argument should be JSON containing {state, action}");
 
-        let new_state = state::reducer(args.state, args.action);
+        let new_state = reducer::reducer(args.state, args.action);
 
         let result = serde_json::to_string(&new_state)
             .expect("Stringify failed for resulting state");

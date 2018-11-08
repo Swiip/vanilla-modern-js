@@ -56,7 +56,5 @@ mod tests {
     #[test]
     fn it_works() {
         Tile::new(42);
-
-        // println!("Tile {:?}", tile);
     }
 }
