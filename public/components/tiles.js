@@ -25,8 +25,8 @@ component(
         if (cell.value > 0) {
           tiles.push(cell);
         }
-        if (Array.isArray(cell.mergedTiles)) {
-          tiles.push(...cell.mergedTiles);
+        if (Array.isArray(cell.merged_tiles)) {
+          tiles.push(...cell.merged_tiles);
         }
       });
     });

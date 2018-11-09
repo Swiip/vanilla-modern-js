@@ -38,18 +38,16 @@ impl Board {
     }
 
     pub fn update_tiles(&mut self) {
-        self.grid
-            .iter_mut()
-            .enumerate()
-            .for_each(|(x, line)| {
-                line
-                    .iter_mut()
-                    .enumerate()
-                    .for_each(|(y, tile)| {
-                        tile.row = x;
-                        tile.column = y;
-                    })
-            });
+        for (row_index, row) in self.grid.iter_mut().enumerate() {
+            for (column_index, tile) in row.iter_mut().enumerate() {
+                tile.row = row_index;
+                tile.column = column_index;
+                for merged_tile in tile.merged_tiles.iter_mut() {
+                    merged_tile.row = row_index;
+                    merged_tile.column = column_index;
+                }
+            }
+        }
     }
 
     pub fn choose_random_tile(&mut self, random_position: f32, random_value: f32) {
@@ -83,68 +81,65 @@ impl Board {
     fn rotate_left(&mut self) {
         let copy = self.grid.clone();
 
-        self.grid
-            .iter_mut()
-            .enumerate()
-            .for_each(|(x, line)| {
-                line
-                    .iter_mut()
-                    .enumerate()
-                    .for_each(|(y, tile)| {
-                        tile.copy(&copy[y][DIMENSION - x - 1]);
-                    })
-            });
+        for (row_index, row) in self.grid.iter_mut().enumerate() {
+            for (column_index, tile) in row.iter_mut().enumerate() {
+                tile.copy(&copy[column_index][DIMENSION - row_index - 1]);
+            }
+        }
     }
 
     fn move_left(&mut self) -> bool {
         let mut current_id = self.current_id;
-
-        let mut get_new_id = || -> usize {
-            current_id += 1;
-            current_id
-        };
-
         let mut changed = false;
 
-        self.grid
-            .iter_mut()
-            .for_each(|line| {
-                let mut new_line: Vec<Tile>;
+        {
+            let mut get_new_id = || -> usize {
+                current_id += 1;
+                current_id
+            };
 
-                {
-                    let mut current_row: Vec<&Tile> = line
-                        .iter()
-                        .filter(|tile| tile.value != 0)
-                        .collect();
+            self.grid
+                .iter_mut()
+                .for_each(|line| {
+                    let mut new_line: Vec<Tile>;
 
-                    current_row.reverse();
+                    {
+                        let mut current_row: Vec<&Tile> = line
+                            .iter()
+                            .filter(|tile| tile.value != 0)
+                            .collect();
 
-                    new_line = get_dimension()
-                        .iter_mut()
-                        .map(|y| {
-                            let mut target_tile = match current_row.pop() {
-                                Some(tile) => tile.clone(),
-                                None => Tile::new(get_new_id()),
-                            };
-                            if current_row.len() > 0 && current_row[0].value == target_tile.value {
-                                let mut tile1 = target_tile.clone();
-                                tile1.merged = true;
-                                target_tile.id = get_new_id();
-                                target_tile.value = tile1.value * 2;
-                                target_tile.merged_tiles.push(tile1);
-                                let mut tile2 = current_row.pop().unwrap().clone();
-                                tile2.merged = true;
-                                target_tile.merged_tiles.push(tile2);
-                            }
-                            changed |= target_tile.value != line[*y].value;
-                            target_tile
-                        })
-                        .collect();
-                }
+                        current_row.reverse();
 
-                line.clear();
-                line.append(&mut new_line);
-            });
+                        new_line = get_dimension()
+                            .iter_mut()
+                            .map(|y| {
+                                let mut target_tile = match current_row.pop() {
+                                    Some(tile) => tile.clone(),
+                                    None => Tile::new(get_new_id()),
+                                };
+                                if current_row.len() > 0 && current_row[current_row.len() - 1].value == target_tile.value {
+                                    let mut tile1 = target_tile.clone();
+                                    tile1.merged = true;
+                                    target_tile.id = get_new_id();
+                                    target_tile.value = tile1.value * 2;
+                                    target_tile.merged_tiles.push(tile1);
+                                    let mut tile2 = current_row.pop().unwrap().clone();
+                                    tile2.merged = true;
+                                    target_tile.merged_tiles.push(tile2);
+                                }
+                                changed |= target_tile.value != line[*y].value;
+                                target_tile
+                            })
+                            .collect();
+                    }
+
+                    line.clear();
+                    line.append(&mut new_line);
+                });
+        }
+
+        self.current_id = current_id;
 
         changed
     }
@@ -193,6 +188,20 @@ mod tests {
     }
 
     #[test]
+    fn rotate_left_with_merge_works() {
+        let mut board = Board::new();
+
+        board.grid[0][0].merged_tiles.push(Tile::new(42));
+
+        board.rotate_left();
+
+        println!("board {:?}", board);
+
+        assert_eq!(board.grid[3][0].merged_tiles.len(), 1);
+        assert_eq!(board.grid[3][0].merged_tiles[0].id, 42);
+    }
+
+    #[test]
     fn move_left_works() {
         let mut board = Board::new();
         board.grid[1][1].value = 2;
@@ -214,5 +223,65 @@ mod tests {
         board.move_action(1);
 
         assert_eq!(board.grid[0][0].value, 2);
+    }
+
+    #[test]
+    fn move_action_with_merge_works() {
+        let mut board = Board::new();
+
+        board.grid[3][0].value = 4;
+        board.grid[3][1].value = 4;
+        board.grid[3][2].value = 16;
+
+        board.move_action(0);
+
+        assert_eq!(board.grid[3][0].value, 8);
+        assert_eq!(board.grid[3][1].value, 16);
+        assert_eq!(board.grid[3][2].value, 0);
+    }
+
+    #[test]
+    fn move_action_with_merge_check_ids_works() {
+        let mut board = Board::new();
+
+        board.grid[3][0].value = 4;
+        board.grid[3][1].value = 4;
+        board.grid[3][2].value = 16;
+
+        let id_4_1 = board.grid[3][0].id;
+        let id_4_2 = board.grid[3][1].id;
+        let id_16 = board.grid[3][2].id;
+        let current_id = board.current_id;
+
+        board.move_action(0);
+
+        assert_eq!(board.current_id, current_id + 15);
+        assert_eq!(board.grid[3][0].id, current_id + 13);
+        assert_eq!(board.grid[3][1].id, id_16);
+        assert_eq!(board.grid[3][0].merged_tiles.len(), 2);
+        assert_eq!(board.grid[3][0].merged_tiles[0].id, id_4_1);
+        assert_eq!(board.grid[3][0].merged_tiles[0].merged, true);
+        assert_eq!(board.grid[3][0].merged_tiles[1].id, id_4_2);
+        assert_eq!(board.grid[3][0].merged_tiles[1].merged, true);
+    }
+
+    #[test]
+    fn move_action_with_merge_right_works() {
+        let mut board = Board::new();
+
+        board.grid[0][0].value = 4;
+        board.grid[0][1].value = 4;
+        board.grid[0][2].value = 4;
+        board.grid[0][3].value = 4;
+
+        board.move_action(2);
+        board.update_tiles();
+
+        println!("board {:?}", board);
+
+        assert_eq!(board.grid[0][2].value, 8);
+        assert_eq!(board.grid[0][2].merged_tiles.len(), 2);
+        assert_eq!(board.grid[0][3].value, 8);
+        assert_eq!(board.grid[0][3].merged_tiles.len(), 2);
     }
 }

@@ -31,6 +31,8 @@ impl Tile {
         self.column = other.column;
         self.old_row = other.old_row;
         self.old_column = other.old_column;
+        self.merged = other.merged;
+        self.merged_tiles = other.merged_tiles.clone();
     }
 }
 
