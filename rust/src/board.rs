@@ -2,7 +2,6 @@ use super::DIMENSION;
 use super::FOOR_PROBABILITY;
 
 use tile::Tile;
-use utils::get_dimension;
 use utils::times;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -98,45 +97,40 @@ impl Board {
                 current_id
             };
 
-            self.grid
-                .iter_mut()
-                .for_each(|line| {
-                    let mut new_line: Vec<Tile>;
+            for row in self.grid.iter_mut() {
+                let mut new_row: Vec<Tile> = vec![];
 
-                    {
-                        let mut current_row: Vec<&Tile> = line
-                            .iter()
-                            .filter(|tile| tile.value != 0)
-                            .collect();
+                {
+                    let mut current_row: Vec<&Tile> = row
+                        .iter()
+                        .filter(|tile| tile.value != 0)
+                        .collect();
 
-                        current_row.reverse();
+                    current_row.reverse();
 
-                        new_line = get_dimension()
-                            .iter_mut()
-                            .map(|y| {
-                                let mut target_tile = match current_row.pop() {
-                                    Some(tile) => tile.clone(),
-                                    None => Tile::new(get_new_id()),
-                                };
-                                if current_row.len() > 0 && current_row[current_row.len() - 1].value == target_tile.value {
-                                    let mut tile1 = target_tile.clone();
-                                    tile1.merged = true;
-                                    target_tile.id = get_new_id();
-                                    target_tile.value = tile1.value * 2;
-                                    target_tile.merged_tiles.push(tile1);
-                                    let mut tile2 = current_row.pop().unwrap().clone();
-                                    tile2.merged = true;
-                                    target_tile.merged_tiles.push(tile2);
-                                }
-                                changed |= target_tile.value != line[*y].value;
-                                target_tile
-                            })
-                            .collect();
+                    for column_index in 0..4 {
+                        let mut target_tile = match current_row.pop() {
+                            Some(tile) => tile.clone(),
+                            None => Tile::new(get_new_id()),
+                        };
+                        if current_row.len() > 0 && current_row[current_row.len() - 1].value == target_tile.value {
+                            let mut tile1 = target_tile.clone();
+                            tile1.merged = true;
+                            target_tile.id = get_new_id();
+                            target_tile.value = tile1.value * 2;
+                            target_tile.merged_tiles.push(tile1);
+                            let mut tile2 = current_row.pop().unwrap().clone();
+                            tile2.merged = true;
+                            target_tile.merged_tiles.push(tile2);
+                        }
+                        changed |= target_tile.value != row[column_index].value;
+                        new_row.push(target_tile);
                     }
+                }
 
-                    line.clear();
-                    line.append(&mut new_line);
-                });
+                row.clear();
+                row.append(&mut new_row);
+            }
         }
 
         self.current_id = current_id;
