@@ -20,6 +20,7 @@ use action::Action;
 
 const DIMENSION: usize = 4;
 const FOOR_PROBABILITY: f32 = 0.2;
+const END_VALUE: usize = 2048;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ReducerArguments {

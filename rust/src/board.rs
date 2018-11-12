@@ -1,5 +1,6 @@
 use super::DIMENSION;
 use super::FOOR_PROBABILITY;
+use super::END_VALUE;
 
 use tile::Tile;
 use utils::times;
@@ -136,6 +137,36 @@ impl Board {
         self.current_id = current_id;
 
         changed
+    }
+
+    pub fn has_won(&self) -> bool {
+        self.grid
+            .iter()
+            .flatten()
+            .filter(|tile| tile.value == END_VALUE)
+            .collect::<Vec<&Tile>>()
+            .len() > 0
+    }
+
+    pub fn has_lost(&self) -> bool {
+        let mut can_move = false;
+        let delta_x: [isize; 4] = [-1, 0, 1, 0];
+        let delta_y: [isize; 4] = [0, -1, 0, 1];
+
+        for row in 0..4 {
+            for column in 0..4 {
+                can_move |= self.grid[row][column].value == 0;
+                for direction in 0..4 {
+                    let new_row = row as isize + delta_x[direction];
+                    let new_column = column as isize + delta_y[direction];
+                    if new_row >= 0 && new_row < DIMENSION as isize && new_column >= 0 && new_column< DIMENSION as isize {
+                        can_move |= self.grid[row][column].value == self.grid[new_row as usize][new_column as usize].value;
+                    }
+                }
+            }
+        }
+
+        !can_move
     }
 }
 
@@ -277,5 +308,50 @@ mod tests {
         assert_eq!(board.grid[0][2].merged_tiles.len(), 2);
         assert_eq!(board.grid[0][3].value, 8);
         assert_eq!(board.grid[0][3].merged_tiles.len(), 2);
+    }
+
+    #[test]
+    fn has_won_false_works() {
+        let mut board = Board::new();
+
+        board.grid[2][2].value = 4;
+
+        assert_eq!(board.has_won(), false);
+    }
+
+    #[test]
+    fn has_won_true_works() {
+        let mut board = Board::new();
+
+        board.grid[1][3].value = END_VALUE;
+
+        assert_eq!(board.has_won(), true);
+    }
+
+    #[test]
+    fn has_lost_false_works() {
+        let mut board = Board::new();
+
+        board.grid[1][3].value = 2;
+
+        assert_eq!(board.has_lost(), false);
+    }
+
+    #[test]
+    fn has_lost_true_works() {
+        let mut board = Board::new();
+
+        board.grid
+            .iter_mut()
+            .flatten()
+            .enumerate()
+            .for_each(|(index, tile)| {
+                // 2 4 2 4   4 2 4 2   2 4 2 4   4 2 4 2
+                tile.value = ((index + (index / 4)) % 2 + 1) * 2;
+            });
+
+        println!("has_lost_true_works {:?}", board);
+
+        assert_eq!(board.has_lost(), true);
     }
 }
