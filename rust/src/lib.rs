@@ -51,7 +51,7 @@ pub extern "C" fn dealloc_str(ptr: *mut c_char) {
 }
 
 #[no_mangle]
-    pub extern "C" fn reducer(args: *mut c_char) -> *mut c_char {
+pub extern "C" fn reducer(args: *mut c_char) -> *mut c_char {
     unsafe {
         let args_in_json = CStr::from_ptr(args)
             .to_str()

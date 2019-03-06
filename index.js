@@ -11,9 +11,9 @@ const readFile = util.promisify(fs.readFile);
 const { findPushFiles, getFilePath } = require("./discover");
 
 const extTypeMap = {
-  ".html": "text/html",
-  ".js": "application/javascript",
-  ".css": "text/css",
+  ".html": "text/html; charset=utf-8",
+  ".js": "application/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
   ".wasm": "application/wasm"
 };
 
@@ -44,8 +44,10 @@ const send = async (stream, requestPath, log = "send") => {
   const headers = {
     "content-length": statData.size,
     "last-modified": statData.mtime.toUTCString(),
-    "content-type": `${extTypeMap[ext]}; charset=utf-8`
+    "content-type": `${extTypeMap[ext]}`
   };
+
+  console.log(log, requestPath);
 
   stream.respondWithFD(fd, headers);
 };

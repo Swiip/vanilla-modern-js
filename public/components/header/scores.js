@@ -1,14 +1,13 @@
 customElements.define(
-  "swiip-container",
-  class Container extends HTMLElement {
+  "swiip-scores",
+  class Scores extends HTMLElement {
     connectedCallback() {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.innerHTML = `
         <style>
           :host {
-            display: block;
-            width: 500px;
-            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
           }
         </style>
         <slot></slot>

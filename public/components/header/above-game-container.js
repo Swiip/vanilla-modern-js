@@ -1,14 +1,15 @@
 customElements.define(
-  "swiip-container",
-  class Container extends HTMLElement {
+  "swiip-above-game-container",
+  class AboveGameContainer extends HTMLElement {
     connectedCallback() {
       this.attachShadow({ mode: "open" });
       this.shadowRoot.innerHTML = `
         <style>
           :host {
-            display: block;
-            width: 500px;
-            margin: 0 auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
           }
         </style>
         <slot></slot>

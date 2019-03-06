@@ -1,12 +1,9 @@
 import "/components/container.js";
-import "/components/heading.js";
-import "/components/above-game.js";
-import "/components/game.js";
-
-// import { store } from "/logic/connector.js";
+import "/components/header/heading.js";
+import "/components/header/above-game.js";
+import "/components/game/game.js";
 
 import { init } from "/logic/connector.js";
-// import { store } from "/compo/src/store.js";
 
 const main = async () => {
   const store = await init();

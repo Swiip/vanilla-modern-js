@@ -4,7 +4,7 @@
 // New Chrome 67 works!
 // Firefox still not :(
 
-import { store } from "/compo/src/store.js";
+export const store = {};
 
 export const init = () =>
   new Promise(resolve => {

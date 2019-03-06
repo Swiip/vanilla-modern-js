@@ -8,8 +8,5 @@
     "build-rust": "cd rust && cargo build --target wasm32-unknown-unknown"
   },
   "author": "Matthieu Lux",
-  "license": "MIT",
-  "dependencies": {
-    "compo": "^0.3.0"
-  }
+  "license": "MIT"
 }
