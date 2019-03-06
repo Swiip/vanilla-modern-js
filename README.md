@@ -36,7 +36,7 @@
 
 - As HTTP/2 is now fully supported by Node, I don't consider it as a dependency
 
-- There is one
+- There is one real cheat: the JSON parser for Rust. Seriously, I can't dev a new parser from scratch ;)
 
 ## Application
 
