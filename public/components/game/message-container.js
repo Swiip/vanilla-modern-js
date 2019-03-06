@@ -1,25 +1,20 @@
 customElements.define(
   "swiip-message-container",
   class MessageContainer extends HTMLElement {
+    static get observedAttributes() {
+      return ["show"];
+    }
     constructor() {
       super();
-      this._show = false;
-    }
-    set show(show) {
-      this._show = show;
+      this.attachShadow({ mode: "open" });
       this.update();
     }
-    connectedCallback() {
-      this.attachShadow({ mode: "open" });
-
-      if (!this.attributes.show) {
-        return;
-      }
-
-      this.show = this.attributes.show.value;
+    attributeChangedCallback(name, oldValue, newValue) {
       this.update();
     }
     update() {
+      const show = this.getAttribute("show") === "true";
+
       this.shadowRoot.innerHTML = `
         <style>
           :host {
@@ -35,7 +30,7 @@ customElements.define(
             justify-content: center;
             align-items: center;
             transition: opacity 0.3s ease;
-            opacity: ${this._show ? 1 : 0};
+            opacity: ${show ? 1 : 0};
           }
         </style>
         <slot></slot>

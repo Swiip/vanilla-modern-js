@@ -1,5 +1,4 @@
 import { store } from "/logic/connector.js";
-import { html } from "/vdom/parser.js";
 import { render } from "/vdom/render.js";
 
 import "./tile.js";
@@ -7,7 +6,8 @@ import "./tile.js";
 customElements.define(
   "swiip-tiles",
   class Tiles extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
       this.update = this.update.bind(this);
       store.subscribe(this.update);
@@ -32,28 +32,27 @@ customElements.define(
         });
       });
 
-      render(
-        this.shadowRoot,
-        html`
-          <div>
-            ${
-              tiles.map(
-                tile => html`
-                  <swiip-tile
-                    key="${tile.id}"
-                    row="${tile.row}"
-                    column="${tile.column}"
-                    value="${tile.value}"
-                    merged="${tile.merged}"
-                  >
-                    ${tile.value}
-                  </swiip-tile>
-                `
-              )
-            }
-          </div>
-        `
-      );
+      const template = `
+        <div>
+          ${tiles
+            .map(
+              tile => `
+                <swiip-tile
+                  key="${tile.id}"
+                  row="${tile.row}"
+                  column="${tile.column}"
+                  value="${tile.value}"
+                  merged="${tile.merged}"
+                >
+                  ${tile.value}
+                </swiip-tile>
+              `
+            )
+            .join("")}
+        </div>
+      `;
+
+      render(this.shadowRoot, template);
     }
   }
 );

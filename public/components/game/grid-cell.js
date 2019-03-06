@@ -1,12 +1,13 @@
 customElements.define(
   "swiip-grid-cell",
   class GridCell extends HTMLElement {
-    connectedCallback() {
-      const {
-        x: { value: x },
-        y: { value: y }
-      } = this.attributes;
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
+
+      const x = this.getAttribute("x");
+      const y = this.getAttribute("y");
+
       this.shadowRoot.innerHTML = `
         <style>
           :host {

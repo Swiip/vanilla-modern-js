@@ -1,7 +1,3 @@
-// im port wrap from "/wrap.js";
-
-importScripts("/wasm/wrap.js");
-
 const init = async () => {
   try {
     const { instance } = await WebAssembly.instantiateStreaming(

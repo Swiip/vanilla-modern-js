@@ -1,8 +1,10 @@
 customElements.define(
   "swiip-grid-container",
   class GridContainer extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
+
       this.shadowRoot.innerHTML = `
         <style>
           :host {

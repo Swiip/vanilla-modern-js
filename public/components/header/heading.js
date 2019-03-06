@@ -1,4 +1,3 @@
-import { html } from "/vdom/parser.js";
 import { render } from "/vdom/render.js";
 
 import "./heading-container.js";
@@ -9,11 +8,13 @@ import "./score.js";
 customElements.define(
   "swiip-heading",
   class Heading extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
+
       render(
         this.shadowRoot,
-        html`
+        `
           <swiip-heading-container>
             <swiip-heading-title>2048</swiip-heading-title>
             <swiip-scores>

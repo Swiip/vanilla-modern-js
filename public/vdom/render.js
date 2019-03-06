@@ -1,4 +1,5 @@
-import { forEach, find } from "../utils/utils.js";
+export const forEach = (...args) => Array.prototype.forEach.call(...args);
+export const find = (...args) => Array.prototype.find.call(...args);
 
 function updateAttr(target, name, newAttr, oldAttr) {
   if (!newAttr) {
@@ -15,16 +16,11 @@ function updateAttrs(target, newNode) {
   );
   attrNames.forEach(name => {
     updateAttr(target, name, newNode.attributes[name], target.attributes[name]);
-    // console.log('set property', target, newNode, newNode[name], newNode.__)
-    if (newNode.__ && newNode.__[name] !== undefined) {
-      // console.log('set computed property', name, newNode.__[name])
-      target[name] = newNode.__[name];
-    }
   });
 }
 
 function changed(node1, node2) {
-  // console.log('changed', node1, node2, node1.tagName, node2.tagName);
+  // console.log("changed", node1, node2, node1.tagName, node2.tagName);
   return (
     ((node1.tagName !== undefined || node2.tagName !== undefined) &&
       node1.tagName !== node2.tagName) ||
@@ -40,14 +36,14 @@ function makeChildPairs(oldNode, newNode) {
   // Matching keys
   forEach(oldNode.childNodes, oldChildNode => {
     if (oldChildNode.attributes && oldChildNode.attributes.key) {
-      const match = find(
-        newNode.childNodes,
-        newChildNode =>
+      const match = find(newNode.childNodes, newChildNode => {
+        return (
           newChildNode.attributes &&
           newChildNode.attributes.key &&
           oldChildNode.attributes.key.value ===
             newChildNode.attributes.key.value
-      );
+        );
+      });
       if (match) {
         pairs.push([oldChildNode, match]);
       } else {
@@ -87,6 +83,7 @@ function makeChildPairs(oldNode, newNode) {
 }
 
 function updateElement(parent, newNode, oldNode) {
+  // console.log("update", newNode, oldNode);
   if (!oldNode) {
     parent.appendChild(newNode);
   } else if (!newNode) {
@@ -94,16 +91,23 @@ function updateElement(parent, newNode, oldNode) {
   } else if (changed(newNode, oldNode)) {
     parent.replaceChild(newNode, oldNode);
   } else if (newNode.tagName) {
-    // console.log('updateElement merge', oldNode, newNode)
+    // console.log("updateElement merge", oldNode, newNode);
     updateAttrs(oldNode, newNode);
     makeChildPairs(oldNode, newNode).forEach(pair => {
-      // console.log('pairs', pair[1], pair[0])
+      // console.log("pairs", pair[1], pair[0]);
       updateElement(oldNode, pair[1], pair[0]);
     });
   }
 }
 
+const parser = string => {
+  const template = document.createElement("template");
+  template.innerHTML = string.trim();
+  // console.log('parser', string.trim(), template.content.childNodes[0].cloneNode())
+  return template.content.childNodes[0];
+};
+
 export function render(parent, html) {
   // console.log('render2', parent, html, parent.childNodes[0]);
-  updateElement(parent, html, parent.childNodes[0]);
+  updateElement(parent, parser(html), parent.childNodes[0]);
 }

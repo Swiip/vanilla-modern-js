@@ -1,7 +1,8 @@
 customElements.define(
   "swiip-above-game-container",
   class AboveGameContainer extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
       this.shadowRoot.innerHTML = `
         <style>

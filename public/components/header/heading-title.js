@@ -1,7 +1,8 @@
 customElements.define(
   "swiip-heading-title",
   class HeadingTitle extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
       this.shadowRoot.innerHTML = `
         <style>

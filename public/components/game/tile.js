@@ -1,4 +1,3 @@
-import { html } from "/vdom/parser.js";
 import { render } from "/vdom/render.js";
 
 const tileParams = [
@@ -63,52 +62,22 @@ const tileParams = [
 customElements.define(
   "swiip-tile",
   class Tile extends HTMLElement {
+    static get observedAttributes() {
+      return ["row", "column", "value", "merged"];
+    }
     constructor() {
       super();
-      this._row = null;
-      this._column = null;
-      this._value = null;
-      this._merged = null;
-    }
-    set row(row) {
-      this._row = row;
-      this.update();
-    }
-    set column(column) {
-      this._column = column;
-      this.update();
-    }
-    set value(value) {
-      this._value = value;
-      this.update();
-    }
-    set merged(merged) {
-      this._merged = merged;
-      this.update();
-    }
-    connectedCallback() {
       this.attachShadow({ mode: "open" });
-
-      if (!this.attributes.value) {
-        return;
-      }
-
-      this.row = this.attributes.row.value;
-      this.column = this.attributes.column.value;
-      this.value = this.attributes.value.value;
-      this.merged = this.attributes.merged.value;
+      this.update();
+    }
+    attributeChangedCallback(name, oldValue, newValue) {
       this.update();
     }
     update() {
-      const value = this._value;
-
-      if (value === null) {
-        return;
-      }
-
-      const row = this._row;
-      const column = this._column;
-      const merged = this._merged;
+      const value = parseInt(this.getAttribute("value"));
+      const row = parseInt(this.getAttribute("row"));
+      const column = parseInt(this.getAttribute("column"));
+      const merged = this.getAttribute("merged") === "true";
       const { color, background, font } = tileParams[Math.log2(value)];
 
       this.shadowRoot.innerHTML = `

@@ -1,8 +1,10 @@
 customElements.define(
   "swiip-scores",
   class Scores extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
+
       this.shadowRoot.innerHTML = `
         <style>
           :host {

@@ -1,5 +1,4 @@
 import { store } from "/logic/connector.js";
-import { html } from "/vdom/parser.js";
 import { render } from "/vdom/render.js";
 
 import "./game-container.js";
@@ -10,12 +9,15 @@ import "./message.js";
 customElements.define(
   "swiip-game",
   class Game extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
+
       window.addEventListener("keydown", this.keyHandler);
+
       render(
         this.shadowRoot,
-        html`
+        `
           <swiip-game-container>
             <swiip-grid></swiip-grid>
             <swiip-tiles></swiip-tiles>

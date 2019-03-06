@@ -1,8 +1,10 @@
 customElements.define(
   "swiip-container",
   class Container extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
+
       this.shadowRoot.innerHTML = `
         <style>
           :host {

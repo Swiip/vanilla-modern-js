@@ -1,34 +1,33 @@
-import { range } from "/utils/utils.js";
-import { html } from "/vdom/parser.js";
 import { render } from "/vdom/render.js";
 
 import "./grid-container.js";
 import "./grid-cell.js";
 
 const size = 4;
+const range = n => Array.apply(null, Array(n)).map((_, i) => i);
+const coords = range(size)
+  .map(x => range(size).map(y => [x, y]))
+  .flat();
 
 customElements.define(
   "swiip-grid",
   class Grid extends HTMLElement {
-    connectedCallback() {
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
 
-      render(
-        this.shadowRoot,
-        html`
-          <swiip-grid-container>
-            ${
-              range(size).map(x =>
-                range(size).map(
-                  y => html`
-                    <swiip-grid-cell x="${x}" y="${y}"></swiip-grid-cell>
-                  `
-                )
-              )
-            }
-          </swiip-grid-container>
-        `
-      );
+      const template = `
+        <swiip-grid-container>
+          ${coords
+            .map(
+              ([x, y]) =>
+                `<swiip-grid-cell x="${x}" y="${y}"></swiip-grid-cell>`
+            )
+            .join("")}
+        </swiip-grid-container>
+      `;
+
+      render(this.shadowRoot, template);
     }
   }
 );

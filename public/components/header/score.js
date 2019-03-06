@@ -1,11 +1,11 @@
 customElements.define(
   "swiip-score",
   class Score extends HTMLElement {
-    connectedCallback() {
-      const {
-        label: { value: label }
-      } = this.attributes;
+    constructor() {
+      super();
       this.attachShadow({ mode: "open" });
+
+      const label = this.getAttribute("label");
       this.shadowRoot.innerHTML = `
         <style>
         :host {

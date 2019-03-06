@@ -1,22 +1,13 @@
-// im port store from "/logic/store.js";
 // Sadly it does not work yet :
 // https://stackoverflow.com/questions/44118600/web-workers-how-to-import-modules
 
-// importScripts("/utils/utils.no-module.js");
-// importScripts("/game/conf.js");
-// importScripts("/game/tile.js");
-// importScripts("/game/add.js");
-// importScripts("/game/init.js");
-// importScripts("/game/move.js");
-// importScripts("/game/end.js");
-// importScripts("/logic/reducer.js");
-
-// im port { start } from "/logic/actions.js";
-// im port reducer from "/logic/reducer.js";
+// im port wrap from "/wasm/index.js";
+// im port wrap from "/wasm/wrap.js";
 
 console.log("WebAssembly from worker", WebAssembly);
 
 importScripts("/wasm/index.js");
+importScripts("/wasm/wrap.js");
 
 let state = {
   board: { current_id: 0, grid: [] },
