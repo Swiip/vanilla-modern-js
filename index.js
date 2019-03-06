@@ -8,19 +8,22 @@ const stat = util.promisify(fs.stat);
 const exists = util.promisify(fs.exists);
 const readFile = util.promisify(fs.readFile);
 
-const { findPushFiles } = require("./discover");
+const { findPushFiles, getFilePath } = require("./discover");
 
 const extTypeMap = {
-  ".html": "text/html",
-  ".js": "application/javascript",
-  ".css": "text/css"
+  ".html": "text/html; charset=utf-8",
+  ".js": "application/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".wasm": "application/wasm"
 };
 
 const acceptedRequests = {
   "/": "/index.html",
   "/index.html": "/index.html",
   "/logic/store.js": "/logic/store.js",
-  "/sw.js": "/sw.js"
+  "/sw.js": "/sw.js",
+  "/rust/debug/2048.wasm": "/rust/debug/2048.wasm",
+  "/rust/release/2048.wasm": "/rust/release/2048.wasm"
 };
 
 const server = http2.createSecureServer({
@@ -41,7 +44,7 @@ const send = async (stream, requestPath, log = "send") => {
   const headers = {
     "content-length": statData.size,
     "last-modified": statData.mtime.toUTCString(),
-    "content-type": `${extTypeMap[ext]}; charset=utf-8`
+    "content-type": `${extTypeMap[ext]}`
   };
 
   console.log(log, requestPath);
@@ -51,13 +54,15 @@ const send = async (stream, requestPath, log = "send") => {
 
 const push = (stream, filePath, from = null) => {
   stream.pushStream({ ":path": filePath }, (err, pushStream) => {
-    pushStream.on("error", error => console.log(error));
+    pushStream.on("error", error => console.error("Push stream error", error));
     send(pushStream, filePath, `push from ${from}`);
   });
 };
 
 server.on("stream", async (stream, headers) => {
   console.log("request", headers[":path"]);
+
+  stream.on("error", error => console.error("Stream error", error));
 
   if (Object.keys(acceptedRequests).includes(headers[":path"])) {
     const request = acceptedRequests[headers[":path"]];
@@ -72,5 +77,7 @@ server.on("stream", async (stream, headers) => {
     stream.end();
   }
 });
+
+server.on("error", error => console.error("Server error", error));
 
 server.listen(8443);

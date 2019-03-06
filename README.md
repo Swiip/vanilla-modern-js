@@ -10,23 +10,33 @@
 
 ## Currently using
 
-* Node HTTP/2 natif support
+- Node HTTP/2 native support
 
-* Full HTTP/2 assets push (the server doesn't even accept request other than `/`)
+- Full HTTP/2 assets push (the server doesn't even accept request other than `/`)
 
-* JavaScript module in the browser
+- JavaScript module in the browser
 
-* Web Components : Custom Elements / HTML Imports / Shadow Dom
+- Web Components : Custom Elements / Shadow Dom (But no HTML Imports / Template)
 
-* CSS Variables
+- CSS Variables
 
-* CSS Grid (used it for the grid but not possible for the tiles as long as transitions doesn't work)
+- CSS Grid (used it for the grid but not possible for the tiles as long as transitions doesn't work)
 
-* Virtual Dom implementation using native HTML parser & diffing directly on real dom
+- Virtual Dom implementation using native HTML parser & diffing directly on real dom
 
-* Redux clone to manage game state
+- Redux clone to manage game state
 
-* Logic in a WebWorker, unfortunately without modules as they are not yet supported
+- Logic in a WebWorker, unfortunately without modules as they are not yet supported
+
+- Logic in Rust compiled in WebAssembly!
+
+## Cheating or not
+
+- I rollback using [compo](https://github.com/Swiip/compo) to keep everything as vanilla as possible
+
+- As HTTP/2 is now fully supported by Node, I don't consider it as a dependency
+
+- There is one
 
 ## Application
 

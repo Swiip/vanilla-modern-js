@@ -5,21 +5,8 @@ let tileId = 0;
     id: tileId++,
     value: value || 0,
     row: row || -1,
-    column: column || -1,
-    oldRow: -1,
-    oldColumn: -1
+    column: column || -1
   };
-}
-
-/* export */ function isNew(tile) {
-  return tile.oldRow === -1;
-}
-
-/* export */ function hasMoved(tile) {
-  return (
-    tile.oldRow !== -1 &&
-    (tile.oldRow !== tile.row || tile.oldColumn !== tile.column)
-  );
 }
 
 /* export */ function update(board) {
@@ -39,8 +26,6 @@ let tileId = 0;
 function updatePositions(tile, row, column) {
   return {
     ...tile,
-    oldRow: tile.row,
-    oldColumn: tile.column,
     row,
     column
   };

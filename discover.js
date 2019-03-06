@@ -9,7 +9,7 @@ const pushTypes = [".html", ".js", ".css"];
 
 const htmlLinkRegex = /<link[^>]+href="([^"]*)"[\s/]*[^>]*>/g;
 const htmlScriptRegex = /<script[^>]*src="([^"]*)"[^>]*>[\s]*<\/script>/g;
-const jsImportRegex = /import.*from[\s]+['"]([^'"]*)['"]/g;
+const jsImportRegex = /(?:import|export)[^'"]*from[\s]+['"]([^'"]*)['"]/g;
 const jsImportNoFromRegex = /import[\s]+['"]([^'"]*)['"]/g;
 const jsWorkerRegex = /new\s+Worker\s*\(\s*['"]([^'"]*)['"]/g;
 const jsImportScriptsRegex = /importScripts\s*\(\s*['"]([^'"]*)['"]/g;
@@ -54,13 +54,18 @@ const findPushFiles = async requestPath => {
     pushes.push(...gatherMatches(cssImportRegex, content));
   }
 
+  pushes = pushes.map(
+    childPath =>
+      childPath.startsWith(".")
+        ? path.resolve(path.dirname(requestPath), childPath)
+        : path.resolve("/", childPath)
+  );
+
   await Promise.all(
     pushes.map(async filePath => {
       pushes.push(...(await findPushFiles(filePath)));
     })
   );
-
-  pushes = pushes.map(filePath => path.resolve("/", filePath));
 
   return pushes;
 };

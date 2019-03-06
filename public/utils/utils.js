@@ -23,3 +23,7 @@ export const forEach = (...args) => Array.prototype.forEach.call(...args);
 export const map = (...args) => Array.prototype.map.call(...args);
 export const reduce = (...args) => Array.prototype.reduce.call(...args);
 export const find = (...args) => Array.prototype.find.call(...args);
+
+// ❤️ https://github.com/acdlite/recompose/blob/master/src/packages/recompose/compose.js
+export const compose = (...funcs) =>
+  funcs.reduce((a, b) => (...args) => a(b(...args)), arg => arg);

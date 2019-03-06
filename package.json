@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node .",
+    "test": "npm run rust:test",
+    "rust:build": "cd rust && cargo build --target wasm32-unknown-unknown",
+    "rust:test": "cd rust && cargo test"
   },
   "author": "Matthieu Lux",
   "license": "MIT"
