@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "build-rust": "cd rust && cargo build --target wasm32-unknown-unknown"
+    "test": "npm run rust:test",
+    "rust:build": "cd rust && cargo build --target wasm32-unknown-unknown",
+    "rust:test": "cd rust && cargo test"
   },
   "author": "Matthieu Lux",
   "license": "MIT"
