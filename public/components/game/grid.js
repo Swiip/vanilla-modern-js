@@ -9,14 +9,12 @@ const coords = range(size)
   .map(x => range(size).map(y => [x, y]))
   .flat();
 
-customElements.define(
-  "swiip-grid",
-  class Grid extends HTMLElement {
-    constructor() {
-      super();
-      this.attachShadow({ mode: "open" });
+class Grid extends HTMLElement {
+  constructor() {
+    super();
+    this.attachShadow({ mode: "open" });
 
-      const template = `
+    const template = `
         <swiip-grid-container>
           ${coords
             .map(
@@ -27,7 +25,8 @@ customElements.define(
         </swiip-grid-container>
       `;
 
-      render(this.shadowRoot, template);
-    }
+    render(this.shadowRoot, template);
   }
-);
+}
+
+customElements.define("swiip-grid", Grid);
